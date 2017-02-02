@@ -77,7 +77,7 @@ public class IndexController {
     }
 
     private void initPrices() {
-        List<Currency> currencies = currencyRepo.getAllCurrencies();
+        List<Currency> currencies = currencyRepo.findAll();
         List<Integer> currencyIds = currencies.stream()
                 .map(Currency::getId)
                 .collect(Collectors.toList());
