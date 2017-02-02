@@ -51,11 +51,11 @@ public class IndexController {
 
     @PostConstruct
     public void postConstruct() {
-        initBrands("Apple", "Samsung", "Sony", "Lenovo");
-        initCurrencies("$", "€", "円", "￥");
-        initProductTypes("Mobile", "Notebook", "Furniture");
-        initPrices();
-        initProducts();
+//        initBrands("Apple", "Samsung", "Sony", "Lenovo");
+//        initCurrencies("$", "€", "円", "￥");
+//        initProductTypes("Mobile", "Notebook", "Furniture");
+//        initPrices();
+//        initProducts();
     }
 
     private void initBrands(String... brands) {
@@ -77,7 +77,7 @@ public class IndexController {
     }
 
     private void initPrices() {
-        List<Currency> currencies = currencyRepo.getAllCurrencies();
+        List<Currency> currencies = currencyRepo.findAll();
         List<Integer> currencyIds = currencies.stream()
                 .map(Currency::getId)
                 .collect(Collectors.toList());
