@@ -1,5 +1,5 @@
 .idea/
-SpringDataTrasactions.iml
+*.iml
 out/
 target/
 __MACOSX/
