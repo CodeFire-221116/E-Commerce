@@ -15,7 +15,7 @@ import java.util.List;
  * Created by human on 2/2/17.
  */
 @Service
-public class ProductService {
+public class ProductService{
 
     @Autowired
     private BrandRepo brandRepo;
@@ -27,13 +27,50 @@ public class ProductService {
     public List<Brand> getAllBrands() {
         return brandRepo.findAll();
     }
-
+    public List<ProductType> getAllProductTypes() {
+        return productTypeRepo.findAll();
+    }
     public List<Product> getAllProducts() {
         return productRepo.findAll();
     }
 
-    public List<ProductType> getAllProductTypes() {
-        return productTypeRepo.findAll();
+    public void createBrand(Brand brand){
+        brandRepo.add(brand);
+    }
+    public void createProductType(ProductType type){
+        productTypeRepo.add(type);
+    }
+    public void createProduct(Product product){
+        productRepo.add(product);
     }
 
+    public Brand getBrand(int id){
+        return brandRepo.getById(id);
+    }
+    public ProductType getProductType(int id){
+        return productTypeRepo.getById(id);
+    }
+    public Product getProduct(int id){
+        return productRepo.getById(id);
+    }
+
+    public void updateBrand(Brand brand){
+        brandRepo.update(brand);
+    }
+    public void updateProductType(ProductType type){
+        productTypeRepo.update(type);
+    }
+    public void updateProduct(Product product){
+        productRepo.update(product);
+    }
+
+    public void deleteBrand(Brand brand){
+        brandRepo.delete(brand);
+    }
+    public void deleteProductType(ProductType type){
+        productTypeRepo.delete(type);
+    }
+    public void deleteProduct(Product product){
+        productRepo.delete(product);
+    }
 }

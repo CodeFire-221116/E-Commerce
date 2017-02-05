@@ -25,13 +25,22 @@ public class BrandRepo {
     }
 
     @Transactional(readOnly = false)
-    public void addBrand(Brand brand) {
+    public void add(Brand brand) {
         entityManager.persist(brand);
     }
-
 
     @Transactional
     public Brand getById(int id) {
         return entityManager.find(Brand.class, id);
+    }
+
+    @Transactional
+    public void update(Brand brand){
+        entityManager.merge(brand);
+    }
+
+    @Transactional
+    public void delete(Brand brand){
+        entityManager.remove(brand);
     }
 }

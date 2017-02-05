@@ -1,9 +1,8 @@
 package ua.com.codefire.ecommerce.data.repo;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ua.com.codefire.ecommerce.data.entity.Brand;
 import ua.com.codefire.ecommerce.data.entity.Product;
 
 import javax.persistence.EntityManager;
@@ -15,33 +14,39 @@ import java.util.List;
  */
 @Repository
 @Transactional(readOnly = true)
-public class ProductRepo {
+public class ProductRepo{
 
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional
     public List<Product> findAll() {
         return entityManager.createQuery("SELECT p FROM Product p", Product.class)
                 .getResultList();
     }
 
-    public List<Integer> getAllProductsIds() {
-        return entityManager.createQuery("SELECT p.id FROM Product p", Integer.class)
-                .getResultList();
+//    public List<Integer> getAllProductsIds() {
+//        return entityManager.createQuery("SELECT p.id FROM Product p", Integer.class)
+//                .getResultList();
+//    }
+
+    @Transactional(readOnly = false)
+    public void add(Product product) {
+            entityManager.persist(product);
     }
 
     @Transactional
-    public boolean addProduct(Product product) {
-        try {
-            entityManager.persist(product);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+    public Product getById(int id) {
+        return entityManager.find(Product.class, id);
     }
 
-    public Product getProductById(int id) {
-        return entityManager.find(Product.class, id);
+    @Transactional
+    public void update(Product product){
+        entityManager.merge(product);
+    }
+
+    @Transactional
+    public void delete(Product product){
+        entityManager.remove(product);
     }
 }

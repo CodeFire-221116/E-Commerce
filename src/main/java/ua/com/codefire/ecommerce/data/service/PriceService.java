@@ -20,11 +20,11 @@ public class PriceService {
     @Autowired
     private CurrencyRepo currencyRepo;
 
-    public List<Price> getAllBrands() {
+    public List<Price> getAllPrices() {
         return priceRepo.findAll();
     }
 
-    public List<Currency> getAllProducts() {
+    public List<Currency> getAllCurrencies() {
         return currencyRepo.findAll();
     }
 

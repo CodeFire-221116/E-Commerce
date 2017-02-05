@@ -29,7 +29,18 @@ public class ProductTypeRepo {
         entityManager.persist(productType);
     }
 
-    public ProductType getProductTypeById(int id) {
+    @Transactional
+    public ProductType getById(int id) {
         return entityManager.find(ProductType.class, id);
+    }
+
+    @Transactional
+    public void update(ProductType type){
+        entityManager.merge(type);
+    }
+
+    @Transactional
+    public void delete(ProductType type){
+        entityManager.remove(type);
     }
 }
