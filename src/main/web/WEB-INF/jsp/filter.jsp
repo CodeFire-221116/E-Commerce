@@ -17,6 +17,11 @@
     <div class="row">
         <h2 class="col-md-2 col-md-offset-5">Products</h2>
     </div>
+    <ul class="nav nav-tabs" id="product_types_tabs">
+        <c:forEach items="${product_types}" var="type">
+            <li><a href="${pageContext.servletContext.contextPath.concat('/filter/').concat(type.id)}">${type.name}</a></li>
+        </c:forEach>
+    </ul>
     <div class="row">
         <table class="col-md-12 table table-striped">
             <thead>

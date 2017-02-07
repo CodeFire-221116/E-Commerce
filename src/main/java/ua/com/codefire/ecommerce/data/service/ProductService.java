@@ -36,4 +36,6 @@ public class ProductService {
         return productTypeRepo.findAll();
     }
 
+    public List<Product> getProductsByTypeId(int id) { return productTypeRepo.findProductsByTypeId(id); }
+
 }
