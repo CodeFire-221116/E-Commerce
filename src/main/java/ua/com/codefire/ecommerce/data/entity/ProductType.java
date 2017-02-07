@@ -1,6 +1,10 @@
 package ua.com.codefire.ecommerce.data.entity;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
@@ -9,13 +13,17 @@ import java.util.List;
  */
 @Entity
 @Table(name = "product_types")
+@NamedQueries({
+        @NamedQuery(name = "ProductType.findAll", query = "SELECT pt FROM ProductType pt"),
+        @NamedQuery(name = "ProductType.findNameById", query = "SELECT pt.name FROM ProductType pt WHERE pt.id = :productTypeId")})
 public class ProductType implements Serializable {
 
     @Id
-    @Column
+    @Column(name = "product_type_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
+    @Column
     private String name;
 
     @OneToMany(mappedBy = "productType")
@@ -28,11 +36,11 @@ public class ProductType implements Serializable {
         this.name = name;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

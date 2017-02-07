@@ -27,5 +27,38 @@ public class PriceService {
     public List<Currency> getAllCurrencies() {
         return currencyRepo.findAll();
     }
+    public void createPrice(Price price){
+        priceRepo.add(price);
+    }
+    public void createCurrency(Currency currency){
+        currencyRepo.add(currency);
+    }
 
+    public Price getPrice(int id){
+        return priceRepo.getById(id);
+    }
+    public Currency getCurrency(int id){
+        return currencyRepo.getById(id);
+    }
+
+    public void updatePrice(Price price){
+        priceRepo.update(price);
+    }
+    public void updateCurrency(Currency currency){
+        currencyRepo.update(currency);
+    }
+
+    public void deletePrice(Price price){
+        priceRepo.delete(price);
+    }
+    public void deleteCurrency(Currency currency){
+        currencyRepo.delete(currency);
+    }
+
+    public String getPriceValueById(int id) {
+        return priceRepo.getValueById(id);
+    }
+    public String getCurrencyNameById(int id) {
+        return currencyRepo.getNameById(id);
+    }
 }

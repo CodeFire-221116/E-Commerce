@@ -20,8 +20,7 @@ public class ProductTypeRepo {
 
     @Transactional
     public List<ProductType> findAll() {
-        return entityManager.createQuery("SELECT p FROM ProductType p", ProductType.class)
-                .getResultList();
+        return entityManager.createNamedQuery("ProductType.findAll", ProductType.class).getResultList();
     }
 
     @Transactional(readOnly = false)
@@ -32,6 +31,11 @@ public class ProductTypeRepo {
     @Transactional
     public ProductType getById(int id) {
         return entityManager.find(ProductType.class, id);
+    }
+
+    @Transactional
+    public String getNameById(int id) {
+        return entityManager.createNamedQuery("ProductType.findNameById").setParameter("productTypeId", id).getSingleResult().toString();
     }
 
     @Transactional

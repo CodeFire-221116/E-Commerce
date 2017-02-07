@@ -73,4 +73,13 @@ public class ProductService{
     public void deleteProduct(Product product){
         productRepo.delete(product);
     }
+
+    public String getBrandNameById(int id) {
+        return brandRepo.getNameById(id);
+    }
+    public String getProductTypeNameById(int id) {
+        return productTypeRepo.getNameById(id);
+    }
+
+
 }

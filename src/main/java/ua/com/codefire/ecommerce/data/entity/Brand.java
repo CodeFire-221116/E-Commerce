@@ -1,6 +1,12 @@
 package ua.com.codefire.ecommerce.data.entity;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,16 +16,19 @@ import java.util.List;
 @Entity
 @Table(name = "product_brands")
 @NamedQueries({
-        @NamedQuery(name = "Brand.findAll", query = "SELECT b FROM Brand b")
+        @NamedQuery(name = "Brand.findAll", query = "SELECT b FROM Brand b"),
+        @NamedQuery(name = "Brand.findNameById", query= "SELECT b.name FROM Brand b WHERE b.id = :brandId")
 })
 public class Brand implements Serializable {
 
     @Id
     @Column(name = "product_brand_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
+
     @Column
     private String name;
+
     @OneToMany(mappedBy = "brand")
     private List<Product> products;
 
@@ -30,11 +39,11 @@ public class Brand implements Serializable {
         this.name = name;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -61,12 +70,15 @@ public class Brand implements Serializable {
 
         Brand brand = (Brand) o;
 
-        return getId().equals(brand.getId());
+        if (getId() != brand.getId()) return false;
+        return getName() != null ? getName().equals(brand.getName()) : brand.getName() == null;
 
     }
 
     @Override
     public int hashCode() {
-        return getId().hashCode();
+        int result = getId();
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
     }
 }

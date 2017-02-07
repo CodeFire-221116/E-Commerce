@@ -1,6 +1,5 @@
 package ua.com.codefire.ecommerce.data.repo;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ua.com.codefire.ecommerce.data.entity.Product;
@@ -21,8 +20,7 @@ public class ProductRepo{
 
     @Transactional
     public List<Product> findAll() {
-        return entityManager.createQuery("SELECT p FROM Product p", Product.class)
-                .getResultList();
+        return entityManager.createNamedQuery("Product.findAll", Product.class).getResultList();
     }
 
 //    public List<Integer> getAllProductsIds() {
@@ -47,6 +45,7 @@ public class ProductRepo{
 
     @Transactional
     public void delete(Product product){
-        entityManager.remove(product);
+        //entityManager.remove(product);
+        entityManager.remove(entityManager.contains(product) ? product : entityManager.merge(product));
     }
 }

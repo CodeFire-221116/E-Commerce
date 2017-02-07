@@ -1,6 +1,14 @@
 package ua.com.codefire.ecommerce.data.entity;
 
+
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -10,19 +18,24 @@ import java.util.List;
 @Entity
 @Table(name = "product_prices")
 @NamedQueries({
-        @NamedQuery(name = "Price.findAll", query = "SELECT p FROM Price p")
+        @NamedQuery(name = "Price.findAll", query = "SELECT p FROM Price p"),
+        @NamedQuery(name = "Price.findValueById", query= "SELECT p.value FROM Price p WHERE p.id = :priceId")
 })
 public class Price {
     @Id
     @Column(name = "product_price_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
+
+    @Column(name="price_value")
     private Double value;
+
     @Column(name = "last_updated")
     private Timestamp lastUpdated;
+
     @OneToMany(mappedBy = "price")
     private List<Product> product;
+
     @ManyToOne
     @JoinColumn(name = "price_currency_id")
     private Currency currency;
