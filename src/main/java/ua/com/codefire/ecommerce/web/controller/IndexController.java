@@ -57,7 +57,6 @@ public class IndexController {
         model.addAttribute("currencies", priceService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
         model.addAttribute("brands", productService.getAllBrands());
-
         model.addAttribute("prices", priceService.getAllPrices());
 
         return "products/edit";
@@ -66,13 +65,11 @@ public class IndexController {
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String postCreateProduct(@Validated @ModelAttribute Product product, BindingResult result) {
 
+        product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
         product.getProductType().setName(productService.getProductTypeNameById(product.getProductType().getId()));
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        product.getPrice().setLastUpdated(timestamp);
-
+        product.getPrice().setLastUpdated(new Timestamp(System.currentTimeMillis()));
         product.getPrice().getCurrency().setName(priceService.getCurrencyNameById(product.getPrice().getCurrency().getId()));
         product.getPrice().setValue(Double.parseDouble(priceService.getPriceValueById(product.getPrice().getId())));
-        product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
 
         if (!result.hasErrors())
             productService.createProduct(product);
@@ -87,30 +84,19 @@ public class IndexController {
         model.addAttribute("currencies", priceService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
         model.addAttribute("brands", productService.getAllBrands());
-
         model.addAttribute("prices", priceService.getAllPrices());
+
         return "products/edit";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String postUpdateProduct(@Validated @ModelAttribute("Product") Product product) {
+    public String postUpdateProduct(@ModelAttribute Product product) {
 
         product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
-        Brand brand = product.getBrand();
-
         product.getProductType().setName(productService.getProductTypeNameById(product.getProductType().getId()));
-        ProductType productType = product.getProductType();
-
         product.getPrice().setLastUpdated(new Timestamp(System.currentTimeMillis()));
         product.getPrice().getCurrency().setName(priceService.getCurrencyNameById(product.getPrice().getCurrency().getId()));
         product.getPrice().setValue(Double.parseDouble(priceService.getPriceValueById(product.getPrice().getId())));
-        Price price = product.getPrice();
-
-        priceService.updatePrice(price);
-
-        product.setBrand(brand);
-        product.setProductType(productType);
-        product.setPrice(price);
 
         productService.updateProduct(product);
         return "redirect:/";
@@ -121,11 +107,13 @@ public class IndexController {
 
         productType.setName(productService.getProductTypeNameById(productType.getId()));
         productService.createProductType(productType);
+
         return "products/edit";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String postDeleteProduct(@RequestParam int id) {
+
         productService.deleteProduct(productService.getProduct(id));
 
         return "redirect:/";
