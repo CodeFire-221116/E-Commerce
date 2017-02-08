@@ -11,16 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import ua.com.codefire.ecommerce.data.entity.*;
 import ua.com.codefire.ecommerce.data.entity.Currency;
-import ua.com.codefire.ecommerce.data.repo.*;
-import ua.com.codefire.ecommerce.data.service.PriceService;
 import ua.com.codefire.ecommerce.data.service.ProductService;
 
-import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Collectors;
 
 /**
  * Created by human on 1/31/17.
@@ -30,14 +24,12 @@ public class IndexController {
 
     @Autowired
     private ProductService productService;
-    @Autowired
-    private PriceService priceService;
 
     @RequestMapping({"/", "/index"})
     public String getIndex(Model model) {
-        List<Product> allProducts = productService.getAllProducts();
+        List<Product> products = productService.getAllProducts();
 
-        model.addAttribute("products", allProducts);
+        model.addAttribute("products", products);
 
         return "products/list";
     }
@@ -47,18 +39,13 @@ public class IndexController {
 
         Product productToEdit = new Product();
         productToEdit.setProductType(new ProductType());
-        Price priceToEdit = new Price();
-        priceToEdit.setLastUpdated(new Timestamp(System.currentTimeMillis()));
-        priceToEdit.setCurrency(new Currency());
-        productToEdit.setPrice(priceToEdit);
+        productToEdit.setCurrency(new Currency());
         productToEdit.setBrand(new Brand());
 
         model.addAttribute("productToEdit", productToEdit);
-        model.addAttribute("currencies", priceService.getAllCurrencies());
+        model.addAttribute("currencies", productService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
         model.addAttribute("brands", productService.getAllBrands());
-
-        model.addAttribute("prices", priceService.getAllPrices());
 
         return "products/edit";
     }
@@ -66,13 +53,11 @@ public class IndexController {
     @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String postCreateProduct(@Validated @ModelAttribute Product product, BindingResult result) {
 
+        product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
+        product.getCurrency().setName(productService.getCurrencyNameById(product.getCurrency().getId()));
         product.getProductType().setName(productService.getProductTypeNameById(product.getProductType().getId()));
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        product.getPrice().setLastUpdated(timestamp);
-
-        product.getPrice().getCurrency().setName(priceService.getCurrencyNameById(product.getPrice().getCurrency().getId()));
-        product.getPrice().setValue(Double.parseDouble(priceService.getPriceValueById(product.getPrice().getId())));
-        product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
+        product.setLastUpdated(timestamp);
 
         if (!result.hasErrors())
             productService.createProduct(product);
@@ -84,48 +69,40 @@ public class IndexController {
     public String getProductEditPage(@RequestParam int id, Model model) {
 
         model.addAttribute("productToEdit", productService.getProduct(id));
-        model.addAttribute("currencies", priceService.getAllCurrencies());
+        model.addAttribute("currencies", productService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
         model.addAttribute("brands", productService.getAllBrands());
 
-        model.addAttribute("prices", priceService.getAllPrices());
         return "products/edit";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String postUpdateProduct(@Validated @ModelAttribute("Product") Product product) {
+    public String postUpdateProduct(@Validated @ModelAttribute Product product, BindingResult result) {
 
         product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
-        Brand brand = product.getBrand();
-
+        product.getCurrency().setName(productService.getCurrencyNameById(product.getCurrency().getId()));
         product.getProductType().setName(productService.getProductTypeNameById(product.getProductType().getId()));
-        ProductType productType = product.getProductType();
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        product.setLastUpdated(timestamp);
 
-        product.getPrice().setLastUpdated(new Timestamp(System.currentTimeMillis()));
-        product.getPrice().getCurrency().setName(priceService.getCurrencyNameById(product.getPrice().getCurrency().getId()));
-        product.getPrice().setValue(Double.parseDouble(priceService.getPriceValueById(product.getPrice().getId())));
-        Price price = product.getPrice();
+        if (!result.hasErrors())
+            productService.updateProduct(product);
 
-        priceService.updatePrice(price);
-
-        product.setBrand(brand);
-        product.setProductType(productType);
-        product.setPrice(price);
-
-        productService.updateProduct(product);
         return "redirect:/";
     }
 
     @RequestMapping(value = "/productType/addProduct", method = RequestMethod.POST)
-    public String postAddType(@ModelAttribute ProductType productType){
+    public String postAddType(@ModelAttribute ProductType productType) {
 
         productType.setName(productService.getProductTypeNameById(productType.getId()));
         productService.createProductType(productType);
+
         return "products/edit";
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String postDeleteProduct(@RequestParam int id) {
+
         productService.deleteProduct(productService.getProduct(id));
 
         return "redirect:/";

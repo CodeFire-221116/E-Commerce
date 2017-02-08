@@ -20,28 +20,24 @@ import java.util.List;
 })
 public class Currency {
     @Id
-    @Column(name = "price_currency_id")
+    @Column(name = "product_currency_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column
     private String name;
 
     @OneToMany(mappedBy = "currency")
-    private List<Price> prices;
+    private List<Product> products;
 
     public Currency() {
     }
 
-    public Currency(String name) {
-        this.name = name;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -53,12 +49,12 @@ public class Currency {
         this.name = name;
     }
 
-    public List<Price> getPrices() {
-        return prices;
+    public List<Product> getProducts() {
+        return products;
     }
 
-    public void setPrices(List<Price> prices) {
-        this.prices = prices;
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override
@@ -68,16 +64,17 @@ public class Currency {
 
         Currency currency = (Currency) o;
 
-        if (id != currency.id) return false;
-        if (!name.equals(currency.name)) return false;
-        return prices != null ? prices.equals(currency.prices) : currency.prices == null;
+        if (getId() != null ? !getId().equals(currency.getId()) : currency.getId() != null) return false;
+        if (!getName().equals(currency.getName())) return false;
+        return getProducts() != null ? getProducts().equals(currency.getProducts()) : currency.getProducts() == null;
+
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + (prices != null ? prices.hashCode() : 0);
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + (getProducts() != null ? getProducts().hashCode() : 0);
         return result;
     }
 }

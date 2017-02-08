@@ -55,8 +55,8 @@
                         <td>${product.model}</td>
                         <td>${product.productType.name}</td>
                         <td>${product.brand.name}</td>
-                        <td>${product.price.value} ${product.price.currency.name}</td>
-                        <td>${product.price.lastUpdated}</td>
+                        <td>${product.priceValue} ${product.currency.name}</td>
+                        <td>${product.lastUpdated}</td>
                         <td nowrap>
                             <a href="./edit?id=${product.id}"
                                class="btn btn-md btn-warning">

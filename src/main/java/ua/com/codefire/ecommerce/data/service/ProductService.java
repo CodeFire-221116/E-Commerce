@@ -3,9 +3,11 @@ package ua.com.codefire.ecommerce.data.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ua.com.codefire.ecommerce.data.entity.Brand;
+import ua.com.codefire.ecommerce.data.entity.Currency;
 import ua.com.codefire.ecommerce.data.entity.Product;
 import ua.com.codefire.ecommerce.data.entity.ProductType;
 import ua.com.codefire.ecommerce.data.repo.BrandRepo;
+import ua.com.codefire.ecommerce.data.repo.CurrencyRepo;
 import ua.com.codefire.ecommerce.data.repo.ProductRepo;
 import ua.com.codefire.ecommerce.data.repo.ProductTypeRepo;
 
@@ -23,7 +25,12 @@ public class ProductService{
     private ProductRepo productRepo;
     @Autowired
     private ProductTypeRepo productTypeRepo;
+    @Autowired
+    private CurrencyRepo currencyRepo;
 
+    public List<Currency> getAllCurrencies() {
+        return currencyRepo.findAll();
+    }
     public List<Brand> getAllBrands() {
         return brandRepo.findAll();
     }
@@ -34,6 +41,9 @@ public class ProductService{
         return productRepo.findAll();
     }
 
+    public void createCurrency(Currency currency){
+        currencyRepo.add(currency);
+    }
     public void createBrand(Brand brand){
         brandRepo.add(brand);
     }
@@ -44,6 +54,9 @@ public class ProductService{
         productRepo.add(product);
     }
 
+    public Currency getCurrency(int id){
+        return currencyRepo.getById(id);
+    }
     public Brand getBrand(int id){
         return brandRepo.getById(id);
     }
@@ -54,6 +67,9 @@ public class ProductService{
         return productRepo.getById(id);
     }
 
+    public void updateCurrency(Currency currency){
+        currencyRepo.update(currency);
+    }
     public void updateBrand(Brand brand){
         brandRepo.update(brand);
     }
@@ -64,6 +80,9 @@ public class ProductService{
         productRepo.update(product);
     }
 
+    public void deleteCurrency(Currency currency){
+        currencyRepo.delete(currency);
+    }
     public void deleteBrand(Brand brand){
         brandRepo.delete(brand);
     }
@@ -74,6 +93,9 @@ public class ProductService{
         productRepo.delete(product);
     }
 
+    public String getCurrencyNameById(int id) {
+        return currencyRepo.getNameById(id);
+    }
     public String getBrandNameById(int id) {
         return brandRepo.getNameById(id);
     }

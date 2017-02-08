@@ -24,7 +24,7 @@ public class Brand implements Serializable {
     @Id
     @Column(name = "product_brand_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column
     private String name;
@@ -35,15 +35,11 @@ public class Brand implements Serializable {
     public Brand() {
     }
 
-    public Brand(String name) {
-        this.name = name;
-    }
-
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -70,15 +66,17 @@ public class Brand implements Serializable {
 
         Brand brand = (Brand) o;
 
-        if (getId() != brand.getId()) return false;
-        return getName() != null ? getName().equals(brand.getName()) : brand.getName() == null;
+        if (getId() != null ? !getId().equals(brand.getId()) : brand.getId() != null) return false;
+        if (!getName().equals(brand.getName())) return false;
+        return getProducts() != null ? getProducts().equals(brand.getProducts()) : brand.getProducts() == null;
 
     }
 
     @Override
     public int hashCode() {
-        int result = getId();
-        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + getName().hashCode();
+        result = 31 * result + (getProducts() != null ? getProducts().hashCode() : 0);
         return result;
     }
 }
