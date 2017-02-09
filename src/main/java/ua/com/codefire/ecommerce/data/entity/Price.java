@@ -19,7 +19,8 @@ import java.util.List;
 @Table(name = "product_prices")
 @NamedQueries({
         @NamedQuery(name = "Price.findAll", query = "SELECT p FROM Price p"),
-        @NamedQuery(name = "Price.findValueById", query= "SELECT p.value FROM Price p WHERE p.id = :priceId")
+        @NamedQuery(name = "Price.findValueById", query= "SELECT p.value FROM Price p WHERE p.id = :priceId"),
+        @NamedQuery(name = "Price.findTopical", query = "SELECT p FROM Price p WHERE p.isTopical = true AND p.product.id = :productId")
 })
 public class Price {
     @Id

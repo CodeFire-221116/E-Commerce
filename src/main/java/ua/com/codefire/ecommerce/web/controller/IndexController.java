@@ -120,11 +120,11 @@ public class IndexController {
 
     @PostConstruct
     public void postConstruct() {
-        initBrands("Apple", "Samsung", "Sony", "Lenovo");
-        initCurrencies("$", "€", "円", "￥");
-        initProductTypes("Mobile", "Notebook", "Furniture");
-        initPrices();
-        initProducts();
+//        initBrands("Apple", "Samsung", "Sony", "Lenovo");
+//        initCurrencies("$", "€", "円", "￥");
+//        initProductTypes("Mobile", "Notebook", "Furniture");
+//        initPrices();
+//        initProducts();
     }
 
     private void initBrands(String... brands) {

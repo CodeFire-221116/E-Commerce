@@ -20,13 +20,17 @@ public class PriceService {
     @Autowired
     private CurrencyRepo currencyRepo;
 
+    public Price getTopicalPrice(Integer id){
+        return priceRepo.findTopicalPrice(id);
+    }
+
     public List<Price> getAllPrices() {
         return priceRepo.findAll();
     }
-
     public List<Currency> getAllCurrencies() {
         return currencyRepo.findAll();
     }
+
     public void createPrice(Price price){
         priceRepo.add(price);
     }
@@ -34,10 +38,10 @@ public class PriceService {
         currencyRepo.add(currency);
     }
 
-    public Price getPrice(int id){
-        return priceRepo.getById(id);
-    }
-    public Currency getCurrency(int id){
+//    public Price getPrice(int id){
+//        return priceRepo.getById(id);
+//    }
+    public Currency getCurrency(Integer id){
         return currencyRepo.getById(id);
     }
 
