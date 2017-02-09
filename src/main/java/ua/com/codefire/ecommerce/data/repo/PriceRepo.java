@@ -23,6 +23,10 @@ public class PriceRepo {
         return entityManager.createNamedQuery("Price.findAll", Price.class).getResultList();
     }
 
+    @Transactional
+    public Price findTopicalPrice(Integer id){
+        return entityManager.createNamedQuery("Price.findTopical", Price.class).setParameter("productId", id).getSingleResult();
+    }
 //    public List<Integer> getAllPricesIds() {
 //        return entityManager.createQuery("SELECT p.id FROM Price p", Integer.class)
 //                .getResultList();
