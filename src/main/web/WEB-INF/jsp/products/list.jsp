@@ -95,16 +95,19 @@
         <div class="col-md-6">
             <ul class="pagination">
                 <li>
-                    <a href="/">&laquo;</a>
+                    <%--<a href="/">&laquo;</a>--%>
+                    <input type="button" onclick="getListForPage(1)">
                 </li>
-                <fmt:formatNumber var="noOfPagesFloored" value="${numberOfPages}"  maxFractionDigits="0"/>
+                <fmt:formatNumber var="noOfPagesFloored" value="${numberOfPages}" maxFractionDigits="0"/>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
                     <li>
-                        <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
+                            <%--<a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>--%>
+                        <input type="button" onclick="getListForPage(${i})">
                     </li>
                 </c:forEach>
                 <li>
-                    <a href="/list?pageNumber=${numberOfPages}&amountPerPage=20">&raquo;</a>
+                    <%--<a href="/list?pageNumber=${numberOfPages}&amountPerPage=20">&raquo;</a>--%>
+                    <input type="button" onclick="getListForPage(${numberOfPages})">
                 </li>
             </ul>
         </div>
@@ -112,5 +115,14 @@
     </div>
 </div>
 <%@include file="/WEB-INF/jsp/javascript.jsp" %>
+<script>
+    getListForPage = function (pageNumber) {
+        var amountByPage = 20;
+
+        $.get("/list?pageNumber=" + pageNumber + "&amountPerPage=20", function(data){
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+    }
+</script>
 </body>
 </html>
