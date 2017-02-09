@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%--
   Created by IntelliJ IDEA.
   User: human
@@ -87,15 +88,16 @@
         </div>
 
         <div class="col-md-2"></div>
-
     </div>
 
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-4"></div>
+        <div class="col-md-6">
             <ul class="pagination">
                 <li>
                     <a href="/">&laquo;</a>
                 </li>
+                <fmt:formatNumber var="noOfPagesFloored" value="${numberOfPages}"  maxFractionDigits="0"/>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
                     <li>
                         <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
@@ -106,6 +108,7 @@
                 </li>
             </ul>
         </div>
+        <div class="col-md-2"></div>
     </div>
 </div>
 <%@include file="/WEB-INF/jsp/javascript.jsp" %>
