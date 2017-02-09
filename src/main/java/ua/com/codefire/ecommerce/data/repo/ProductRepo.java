@@ -6,6 +6,7 @@ import ua.com.codefire.ecommerce.data.entity.Product;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -47,5 +48,18 @@ public class ProductRepo{
     public void delete(Product product){
         //entityManager.remove(product);
         entityManager.remove(entityManager.contains(product) ? product : entityManager.merge(product));
+    }
+
+    @Transactional
+    public List<Product> getProductsByPage(int pageNumber, int amountByPage) {
+        Query query = entityManager.createNamedQuery("Product.findAll", Product.class);
+        query.setFirstResult((pageNumber - 1) * amountByPage);
+        query.setMaxResults(amountByPage);
+        return query.getResultList();
+    }
+
+    @Transactional
+    public long getProductsAmount() {
+        return entityManager.createNamedQuery("Product.getCount", Long.class).getSingleResult();
     }
 }

@@ -11,6 +11,18 @@
 <head>
     <title>PostData</title>
     <%@include file="/WEB-INF/jsp/stylesheet.jsp" %>
+    <style>
+        .pagination {
+            display: inline-block;
+        }
+
+        .pagination a {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -43,8 +55,8 @@
                     <th>Model</th>
                     <th>Type</th>
                     <th>Brand</th>
-                    <th>Price</th>
-                    <th>Last update</th>
+                    <%--<th>Price</th>--%>
+                    <%--<th>Last update</th>--%>
                     <th style="width: 1%"></th>
                 </tr>
                 </thead>
@@ -55,8 +67,8 @@
                         <td>${product.model}</td>
                         <td>${product.productType.name}</td>
                         <td>${product.brand.name}</td>
-                        <td>${product.price.value} ${product.price.currency.name}</td>
-                        <td>${product.price.lastUpdated}</td>
+                            <%--<td>${product.price.value} ${product.price.currency.name}</td>--%>
+                            <%--<td>${product.price.lastUpdated}</td>--%>
                         <td nowrap>
                             <a href="./edit?id=${product.id}"
                                class="btn btn-md btn-warning">
@@ -76,6 +88,24 @@
 
         <div class="col-md-2"></div>
 
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <ul class="pagination">
+                <li>
+                    <a href="/">&laquo;</a>
+                </li>
+                <c:forEach var="i" begin="1" end="${numberOfPages}">
+                    <li>
+                        <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
+                    </li>
+                </c:forEach>
+                <li>
+                    <a href="/list?pageNumber=${numberOfPages}&amountPerPage=20">&raquo;</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
 <%@include file="/WEB-INF/jsp/javascript.jsp" %>

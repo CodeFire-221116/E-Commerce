@@ -27,17 +27,23 @@ import java.util.stream.Collectors;
  */
 @Controller
 public class IndexController {
-
     @Autowired
     private ProductService productService;
     @Autowired
     private PriceService priceService;
 
+    private static final List<String> productModels = new ArrayList<>(Arrays.asList("IPhone", "IPode",
+            "IChair", "ITable", "IMac", "ITV", "SamsungPhone", "SamsungPode", "SamsungChair", "SamsungTable",
+            "SamsungMac", "SamsungTV"));
+
+    public static final int amountByPage = 20;
+
     @RequestMapping({"/", "/index"})
     public String getIndex(Model model) {
-        List<Product> allProducts = productService.getAllProducts();
+        List<Product> productsByPage = productService.getProductsByPage(1, amountByPage);
 
-        model.addAttribute("products", allProducts);
+        model.addAttribute("numberOfPages", Math.ceil(productService.getProductsAmount() / amountByPage));
+        model.addAttribute("products", productsByPage);
 
         return "products/list";
     }
@@ -50,7 +56,6 @@ public class IndexController {
         Price priceToEdit = new Price();
         priceToEdit.setLastUpdated(new Timestamp(System.currentTimeMillis()));
         priceToEdit.setCurrency(new Currency());
-        productToEdit.setPrice(priceToEdit);
         productToEdit.setBrand(new Brand());
 
         model.addAttribute("productToEdit", productToEdit);
@@ -67,9 +72,6 @@ public class IndexController {
 
         product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
         product.getProductType().setName(productService.getProductTypeNameById(product.getProductType().getId()));
-        product.getPrice().setLastUpdated(new Timestamp(System.currentTimeMillis()));
-        product.getPrice().getCurrency().setName(priceService.getCurrencyNameById(product.getPrice().getCurrency().getId()));
-        product.getPrice().setValue(Double.parseDouble(priceService.getPriceValueById(product.getPrice().getId())));
 
         if (!result.hasErrors())
             productService.createProduct(product);
@@ -94,9 +96,6 @@ public class IndexController {
 
         product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
         product.getProductType().setName(productService.getProductTypeNameById(product.getProductType().getId()));
-        product.getPrice().setLastUpdated(new Timestamp(System.currentTimeMillis()));
-        product.getPrice().getCurrency().setName(priceService.getCurrencyNameById(product.getPrice().getCurrency().getId()));
-        product.getPrice().setValue(Double.parseDouble(priceService.getPriceValueById(product.getPrice().getId())));
 
         productService.updateProduct(product);
         return "redirect:/";
@@ -117,5 +116,74 @@ public class IndexController {
         productService.deleteProduct(productService.getProduct(id));
 
         return "redirect:/";
+    }
+
+    @PostConstruct
+    public void postConstruct() {
+        initBrands("Apple", "Samsung", "Sony", "Lenovo");
+        initCurrencies("$", "€", "円", "￥");
+        initProductTypes("Mobile", "Notebook", "Furniture");
+        initPrices();
+        initProducts();
+    }
+
+    private void initBrands(String... brands) {
+        for (String brand : brands) {
+            productService.createBrand(new Brand(brand));
+        }
+    }
+
+    private void initCurrencies(String... currencies) {
+        for (String currency : currencies) {
+            priceService.createCurrency(new Currency(currency));
+        }
+    }
+
+    private void initProductTypes(String... productTypes) {
+        for (String productType : productTypes) {
+            productService.createProductType(new ProductType(productType));
+        }
+    }
+
+    private void initPrices() {
+        List<Currency> currencies = priceService.getAllCurrencies();
+        List<Integer> currencyIds = currencies.stream()
+                .map(Currency::getId)
+                .collect(Collectors.toList());
+        for(int i = 20; i < 100; i += 5) {
+            int currencyId = ThreadLocalRandom.current().nextInt(Collections.min(currencyIds),
+                    Collections.max(currencyIds) + 1);
+            priceService.createPrice(
+                    new Price((double)i,
+                            Timestamp.valueOf(LocalDateTime.now()),
+                            currencies.stream()
+                                    .filter(article -> article.getId() == currencyId)
+                                    .findFirst().get()));
+        }
+    }
+
+    private void initProducts() {
+        List<Price> prices = priceService.getAllPrices();
+        List<Brand> brands = productService.getAllBrands();
+        List<ProductType> productTypes = productService.getAllProductTypes();
+
+        prices.forEach(price -> {
+            brands.forEach(brand -> {
+                productTypes.forEach(productType -> {
+                    productService.createProduct(new Product(productType,
+                            brand, productModels.get((new Random()).nextInt(productModels.size()))));
+                });
+            });
+        });
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String index(@RequestParam Integer pageNumber, @RequestParam Integer amountPerPage, Model model) {
+        List<Product> allProducts = productService.getProductsByPage(pageNumber, amountPerPage);
+
+        model.addAttribute("products", allProducts);
+        model.addAttribute("numberOfPages", Math.ceil(productService.getProductsAmount() / amountByPage));
+
+        return "products/list";
     }
 }

@@ -80,6 +80,11 @@ public class ProductService{
     public String getProductTypeNameById(int id) {
         return productTypeRepo.getNameById(id);
     }
+    public List<Product> getProductsByPage(int pageNumber, int amountByPage) {
+        return productRepo.getProductsByPage(pageNumber, amountByPage);
+    }
 
-
+    public long getProductsAmount() {
+        return productRepo.getProductsAmount();
+    }
 }
