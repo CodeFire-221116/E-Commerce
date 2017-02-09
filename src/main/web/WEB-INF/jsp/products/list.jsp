@@ -93,7 +93,7 @@
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <ul class="pagination">
-                <li>
+                <li class="${empty param.pageNumber or param.pageNumber le 1 ?'disabled':''}">
                     <a href="/">&laquo;</a>
                 </li>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
@@ -101,7 +101,7 @@
                         <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
                     </li>
                 </c:forEach>
-                <li>
+                <li class="${param.pageNumber ge numberOfPages ? 'disabled': ''}">
                     <a href="/list?pageNumber=${numberOfPages}&amountPerPage=20">&raquo;</a>
                 </li>
             </ul>

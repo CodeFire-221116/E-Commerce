@@ -182,7 +182,7 @@ public class IndexController {
         List<Product> allProducts = productService.getProductsByPage(pageNumber, amountPerPage);
 
         model.addAttribute("products", allProducts);
-        model.addAttribute("numberOfPages", Math.ceil(productService.getProductsAmount() / amountByPage));
+        model.addAttribute("numberOfPages", (int)Math.ceil(productService.getProductsAmount() / amountByPage));
 
         return "products/list";
     }

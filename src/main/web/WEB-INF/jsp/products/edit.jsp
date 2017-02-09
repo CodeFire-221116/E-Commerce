@@ -152,7 +152,7 @@
 
                 <div class="form-group row">
 
-                    <form:hidden path="productToEdit.price.lastUpdated"/>
+                    <%--<form:hidden path="productToEdit.price.lastUpdated"/>--%>
 
                     <label class="col-md-1" style="text-align: right">Price</label>
 
@@ -161,21 +161,21 @@
                         <%--<form:input path="productToEdit.price.value" class="form-control" type="text" name="price"--%>
                                     <%--value="${productToEdit.price.value}" placeholder="Enter price here" id="price"/>--%>
 
-                        <form:select path="productToEdit.price.id" class="selectpicker form-control"
-                                     data-live-search="true"
-                                     title="${productToEdit.price.value}">
-                            <form:options items="${prices}" itemValue="id" itemLabel="value"/>
-                        </form:select>
+                        <%--<form:select path="productToEdit.price.id" class="selectpicker form-control"--%>
+                                     <%--data-live-search="true"--%>
+                                     <%--title="${productToEdit.price.value}">--%>
+                            <%--<form:options items="${prices}" itemValue="id" itemLabel="value"/>--%>
+                        <%--</form:select>--%>
 
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <form:select path="productToEdit.price.currency.id" class="selectpicker form-control"
-                                         data-live-search="true" name="currency"
-                                         title="${productToEdit.price.currency.name}">
-                                <form:options items="${currencies}" itemValue="id" itemLabel="name"/>
-                            </form:select>
+                            <%--<form:select path="productToEdit.price.currency.id" class="selectpicker form-control"--%>
+                                         <%--data-live-search="true" name="currency"--%>
+                                         <%--title="${productToEdit.price.currency.name}">--%>
+                                <%--<form:options items="${currencies}" itemValue="id" itemLabel="name"/>--%>
+                            <%--</form:select>--%>
                         </div>
                     </div>
 
