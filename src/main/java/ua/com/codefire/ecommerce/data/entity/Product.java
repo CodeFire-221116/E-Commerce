@@ -33,6 +33,17 @@ public class Product implements Serializable {
 
     private String model;
 
+    public Price getTopicalPrice(){
+        Price topicalPrice = null;
+        for(Price p : prices){
+            if(p.isTopical()){
+                topicalPrice = p;
+                break;
+            }
+        }
+        return topicalPrice;
+    }
+
     public Product() {
     }
 
