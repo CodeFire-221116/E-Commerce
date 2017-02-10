@@ -37,7 +37,7 @@
         <div class="col-md-2">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h5>Products` count <span class="label label-default">${products.size()}</span></h5>
+                    <h5>Products` count <span class="label label-default">${totalProductsCount}</span></h5>
                 </div>
                 <div class="panel-body text-center">
                     <a class="btn btn-success pull-center" href="./new">
@@ -94,19 +94,19 @@
         <div class="col-md-4"></div>
         <div class="col-md-6">
             <ul class="pagination">
-                <li>
-                    <%--<a href="/">&laquo;</a>--%>
-                    <input type="button" onclick="getListForPage(1)">
+                <li class="${empty param.pageNumber or param.pageNumber le 1 ?'disabled':''}">
+                    <a href="/">&laquo;</a>
+                    <%--<input type="button" onclick="getListForPage(1)">--%>
                 </li>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
                     <li>
-                            <%--<a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>--%>
-                        <input type="button" onclick="getListForPage(${i})">
+                        <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
+                            <%--<input type="button" onclick="getListForPage(${i})">--%>
                     </li>
                 </c:forEach>
-                <li>
-                    <%--<a href="/list?pageNumber=${numberOfPages}&amountPerPage=20">&raquo;</a>--%>
-                    <input type="button" onclick="getListForPage(${numberOfPages})">
+                <li class="${param.pageNumber ge numberOfPages ? 'disabled': ''}">
+                    <a href="/list?pageNumber=${numberOfPages}&amountPerPage=20" >&raquo;</a>
+                    <%--<input type="button" onclick="getListForPage(${numberOfPages})">--%>
                 </li>
             </ul>
         </div>
@@ -118,7 +118,7 @@
     getListForPage = function (pageNumber) {
         var amountByPage = 20;
 
-        $.get("/list?pageNumber=" + pageNumber + "&amountPerPage=20", function(data){
+        $.get("/list?pageNumber=" + pageNumber + "&amountPerPage=20", function (data) {
             alert("Data: " + data + "\nStatus: " + status);
         });
     }

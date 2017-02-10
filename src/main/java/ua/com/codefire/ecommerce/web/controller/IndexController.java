@@ -39,10 +39,11 @@ public class IndexController {
     public String getIndex(Model model) {
         List<Product> productsByPage = productService.getProductsByPage(1, amountByPage);
         model.addAttribute("products", productsByPage);
+        model.addAttribute("totalProductsCount", productService.getProductsAmount());
 
         long totalProducts = productService.getProductsAmount();
         long remainder = totalProducts % amountByPage;
-        model.addAttribute("numberOfPages", Math.ceil(totalProducts / amountByPage) + remainder / 10);
+        model.addAttribute("numberOfPages", (int)(Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
     }
@@ -187,15 +188,16 @@ public class IndexController {
         });
     }
 
-    @ResponseBody
+//    @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String index(@RequestParam Integer pageNumber, @RequestParam Integer amountPerPage, Model model) {
         List<Product> allProducts = productService.getProductsByPage(pageNumber, amountPerPage);
         model.addAttribute("products", allProducts);
+        model.addAttribute("totalProductsCount", productService.getProductsAmount());
 
         long totalProducts = productService.getProductsAmount();
         long remainder = totalProducts % amountByPage;
-        model.addAttribute("numberOfPages", Math.ceil(totalProducts / amountByPage) + remainder / 10);
+        model.addAttribute("numberOfPages", (int)(Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
     }

@@ -45,6 +45,7 @@ public class DataConfig {
 
         Properties props = new Properties();
         props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
+        props.put("hibernate.enable_lazy_load_no_trans", env.getProperty("hibernate.enable_lazy_load_no_trans"));
         factory.setJpaProperties(props);
 
         factory.setPersistenceProvider(new HibernatePersistenceProvider());
