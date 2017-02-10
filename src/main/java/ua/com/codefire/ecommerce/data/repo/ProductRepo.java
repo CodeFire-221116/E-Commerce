@@ -46,7 +46,6 @@ public class ProductRepo{
 
     @Transactional
     public void delete(Product product){
-        //entityManager.remove(product);
         entityManager.remove(entityManager.contains(product) ? product : entityManager.merge(product));
     }
 
