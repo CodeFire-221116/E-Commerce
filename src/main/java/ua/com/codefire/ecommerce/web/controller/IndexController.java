@@ -126,6 +126,17 @@ public class IndexController {
 //        initProducts();
     }
 
+    @RequestMapping(value = "/init", method = RequestMethod.GET)
+    public String initValues() {
+        initBrands("Apple", "Samsung", "Sony", "Lenovo");
+        initCurrencies("$", "€", "円", "￥");
+        initProductTypes("Mobile", "Notebook", "Furniture");
+        initPrices();
+        initProducts();
+
+        return "redirect:/";
+    }
+
     private void initBrands(String... brands) {
         for (String brand : brands) {
             productService.createBrand(new Brand(brand));

@@ -98,7 +98,6 @@
                     <%--<a href="/">&laquo;</a>--%>
                     <input type="button" onclick="getListForPage(1)">
                 </li>
-                <fmt:formatNumber var="noOfPagesFloored" value="${numberOfPages}" maxFractionDigits="0"/>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
                     <li>
                             <%--<a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>--%>
