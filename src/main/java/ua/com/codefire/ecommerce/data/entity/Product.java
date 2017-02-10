@@ -2,6 +2,7 @@ package ua.com.codefire.ecommerce.data.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by human on 1/31/17.
@@ -9,18 +10,18 @@ import java.io.Serializable;
 @Entity
 @Table(name = "products")
 @NamedQueries({
-        @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p")
+        @NamedQuery(name = "Product.findAll", query = "SELECT p FROM Product p"),
+        @NamedQuery(name = "Product.getCount", query = "SELECT COUNT(p.id) FROM Product p")
 })
 public class Product implements Serializable {
 
     @Id
-    @Column
+    @Column(name="product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
-    @ManyToOne
-    @JoinColumn(name = "product_price_id")
-    private Price price;
+    @OneToMany(mappedBy = "product")
+    private List<Price> prices;
 
     @ManyToOne
     @JoinColumn(name = "product_type_id")
@@ -35,18 +36,17 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(Price price, ProductType productType, Brand brand, String model) {
-        this.price = price;
+    public Product(ProductType productType, Brand brand, String model) {
         this.productType = productType;
         this.brand = brand;
         this.model = model;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -74,12 +74,12 @@ public class Product implements Serializable {
         this.model = model;
     }
 
-    public Price getPrice() {
-        return price;
+    public List<Price> getPrices() {
+        return prices;
     }
 
-    public void setPrice(Price price) {
-        this.price = price;
+    public void setPrices(List<Price> prices) {
+        this.prices = prices;
     }
 
     @Override
@@ -89,12 +89,18 @@ public class Product implements Serializable {
 
         Product product = (Product) o;
 
-        return getId() == product.getId();
-
+        if (id != null ? !id.equals(product.id) : product.id != null) return false;
+        if (productType != null ? !productType.equals(product.productType) : product.productType != null) return false;
+        if (brand != null ? !brand.equals(product.brand) : product.brand != null) return false;
+        return model != null ? model.equals(product.model) : product.model == null;
     }
 
     @Override
     public int hashCode() {
-        return getId();
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (productType != null ? productType.hashCode() : 0);
+        result = 31 * result + (brand != null ? brand.hashCode() : 0);
+        result = 31 * result + (model != null ? model.hashCode() : 0);
+        return result;
     }
 }

@@ -1,6 +1,12 @@
 package ua.com.codefire.ecommerce.data.entity;
 
+import org.hibernate.annotations.*;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.util.List;
 
 /**
@@ -9,7 +15,8 @@ import java.util.List;
 @Entity
 @Table(name = "price_currencies")
 @NamedQueries({
-        @NamedQuery(name = "Currency.findAll", query = "SELECT c FROM Currency c")
+        @NamedQuery(name = "Currency.findAll", query = "SELECT c FROM Currency c"),
+        @NamedQuery(name = "Currency.findNameById", query= "SELECT c.name FROM Currency c WHERE c.id = :currencyId")
 })
 public class Currency {
     @Id

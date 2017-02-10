@@ -20,18 +20,31 @@ public class BrandRepo {
 
     @Transactional
     public List<Brand> findAll() {
-        return entityManager.createNamedQuery("Brand.findAll", Brand.class)
-                .getResultList();
+        return entityManager.createNamedQuery("Brand.findAll", Brand.class).getResultList();
     }
 
     @Transactional(readOnly = false)
-    public void addBrand(Brand brand) {
+    public void add(Brand brand) {
         entityManager.persist(brand);
     }
-
 
     @Transactional
     public Brand getById(int id) {
         return entityManager.find(Brand.class, id);
+    }
+
+    @Transactional
+    public String getNameById(int id) {
+        return entityManager.createNamedQuery("Brand.findNameById").setParameter("brandId", id).getSingleResult().toString();
+    }
+
+    @Transactional
+    public void update(Brand brand){
+        entityManager.merge(brand);
+    }
+
+    @Transactional
+    public void delete(Brand brand){
+        entityManager.remove(brand);
     }
 }

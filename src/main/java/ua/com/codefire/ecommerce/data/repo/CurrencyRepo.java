@@ -20,8 +20,7 @@ public class CurrencyRepo {
 
     @Transactional
     public List<Currency> findAll() {
-        return entityManager.createNamedQuery("Currency.findAll", Currency.class)
-                .getResultList();
+        return entityManager.createNamedQuery("Currency.findAll", Currency.class).getResultList();
     }
 
     @Transactional(readOnly = false)
@@ -29,7 +28,23 @@ public class CurrencyRepo {
         entityManager.persist(currency);
     }
 
+    @Transactional
     public Currency getById(int id) {
         return entityManager.find(Currency.class, id);
+    }
+
+    @Transactional
+    public String getNameById(int id) {
+        return entityManager.createNamedQuery("Currency.findNameById").setParameter("currencyId", id).getSingleResult().toString();
+    }
+
+    @Transactional
+    public void update(Currency currency){
+        entityManager.merge(currency);
+    }
+
+    @Transactional
+    public void delete(Currency currency){
+        entityManager.remove(currency);
     }
 }

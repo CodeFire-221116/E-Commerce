@@ -1,6 +1,14 @@
 package ua.com.codefire.ecommerce.data.entity;
 
+
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -10,19 +18,30 @@ import java.util.List;
 @Entity
 @Table(name = "product_prices")
 @NamedQueries({
-        @NamedQuery(name = "Price.findAll", query = "SELECT p FROM Price p")
+        @NamedQuery(name = "Price.findAll", query = "SELECT p FROM Price p"),
+        @NamedQuery(name = "Price.findValueById", query= "SELECT p.value FROM Price p WHERE p.id = :priceId"),
+        @NamedQuery(name = "Price.findTopical", query = "SELECT p FROM Price p WHERE p.isTopical = true AND p.product.id = :productId")
 })
 public class Price {
     @Id
     @Column(name = "product_price_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
+
+    @Column(name="price_value")
     private Double value;
+
     @Column(name = "last_updated")
     private Timestamp lastUpdated;
-    @OneToMany(mappedBy = "price")
-    private List<Product> product;
+
+    @Column(name = "is_topical")
+    private boolean isTopical;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+
+
     @ManyToOne
     @JoinColumn(name = "price_currency_id")
     private Currency currency;
@@ -68,11 +87,19 @@ public class Price {
         this.lastUpdated = lastUpdated;
     }
 
-    public List<Product> getProduct() {
+    public boolean isTopical() {
+        return isTopical;
+    }
+
+    public void setTopical(boolean topical) {
+        isTopical = topical;
+    }
+
+    public Product getProduct() {
         return product;
     }
 
-    public void setProduct(List<Product> product) {
+    public void setProduct(Product product) {
         this.product = product;
     }
 
@@ -84,17 +111,15 @@ public class Price {
         Price price = (Price) o;
 
         if (id != price.id) return false;
-        if (!value.equals(price.value)) return false;
-        if (!lastUpdated.equals(price.lastUpdated)) return false;
-        return currency != null ? currency.equals(price.currency) : price.currency == null;
+        if (value != null ? !value.equals(price.value) : price.value != null) return false;
+        return lastUpdated != null ? lastUpdated.equals(price.lastUpdated) : price.lastUpdated == null;
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + value.hashCode();
-        result = 31 * result + lastUpdated.hashCode();
-        result = 31 * result + (currency != null ? currency.hashCode() : 0);
+        result = 31 * result + (value != null ? value.hashCode() : 0);
+        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
         return result;
     }
 }
