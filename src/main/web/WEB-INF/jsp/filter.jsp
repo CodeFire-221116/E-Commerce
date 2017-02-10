@@ -30,8 +30,8 @@
                 <th>Model</th>
                 <th>Product Type</th>
                 <th>Brand</th>
-                <th>Price</th>
-                <th style="width: 16%">Last updated</th>
+                <%--<th>Price</th>
+                <th style="width: 16%">Last updated</th>--%>
             </tr>
             </thead>
             <tbody>
@@ -42,8 +42,8 @@
                     <td>${prod.model}</td>
                     <td>${prod.productType.name}</td>
                     <td>${prod.brand.name}</td>
-                    <td>${prod.price.value} ${prod.price.currency.name}</td>
-                    <td>${prod.price.lastUpdated}</td>
+                    <%--<td>${prod.price.value} ${prod.price.currency.name}</td>
+                    <td>${prod.price.lastUpdated}</td>--%>
                 </tr>
             </c:forEach>
 

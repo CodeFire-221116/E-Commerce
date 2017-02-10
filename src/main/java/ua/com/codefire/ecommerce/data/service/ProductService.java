@@ -87,4 +87,7 @@ public class ProductService{
     public long getProductsAmount() {
         return productRepo.getProductsAmount();
     }
+
+    public List<Product> getProductsByTypeId(int id) { return productTypeRepo.findProductsByTypeId(id); }
+
 }
