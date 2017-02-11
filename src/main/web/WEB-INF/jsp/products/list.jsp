@@ -71,7 +71,7 @@
                             <%--<td>${product.price.value} ${product.price.currency.name}</td>--%>
                             <%--<td>${product.price.lastUpdated}</td>--%>
                         <td nowrap>
-                            <a href="./edit?id=${product.id}"
+                            <a href="./edit?productId=${product.id}"
                                class="btn btn-md btn-warning">
                                 <i class="fa fa-fw fa-wrench"></i>
                             </a>

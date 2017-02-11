@@ -16,7 +16,7 @@ import java.util.List;
 public class Product implements Serializable {
 
     @Id
-    @Column(name="product_id")
+    @Column(name = "product_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
@@ -33,12 +33,14 @@ public class Product implements Serializable {
 
     private String model;
 
-    public Price getTopicalPrice(){
+    public Price findTopicalPrice() {
         Price topicalPrice = null;
-        for(Price p : prices){
-            if(p.isTopical()){
-                topicalPrice = p;
-                break;
+        if (prices != null) {
+            for (Price p : prices) {
+                if (p.getIsTopical()) {
+                    topicalPrice = p;
+                    break;
+                }
             }
         }
         return topicalPrice;

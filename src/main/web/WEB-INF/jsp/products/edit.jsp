@@ -33,8 +33,9 @@
                     <label class="col-md-1" style="text-align: right">Type</label>
 
                     <div class="col-md-8">
-                        <form:select class="selectpicker form-control" path="productToEdit.productType.id"
-                                     title="${productToEdit.productType.name}" data-live-search="true">
+                        <form:hidden path="topicalPrice.product.id"/>
+                        <form:select class="selectpicker form-control" path="topicalPrice.product.productType.id"
+                                     title="${topicalPrice.product.productType.name}" data-live-search="true">
                             <form:options items="${types}" itemValue="id" itemLabel="name"/>
                         </form:select>
                     </div>
@@ -83,18 +84,18 @@
                 </div>
 
                 <div class="form-group row">
-                    <%--<form: path="productToEdit.brand.id"/>--%>
+                    <%--<form: path="topicalPrice.product.brand.id"/>--%>
 
                     <label class="col-md-1" style="text-align: right">Brand</label>
 
                     <div class="col-md-8">
-                        <form:select path="productToEdit.brand.id" class="selectpicker form-control"
-                                     title="${productToEdit.brand.name}"
+                        <form:select path="topicalPrice.product.brand.id" class="selectpicker form-control"
+                                     title="${topicalPrice.product.brand.name}"
                                      data-live-search="true">
                             <form:options items="${brands}" itemValue="id" itemLabel="name"/>
                         </form:select>
-                        <%--<spring:bind path="productToEdit.brand.name">--%>
-                        <%--<select class="selectpicker form-control" name="brand" title="${productToEdit.brand.name}"--%>
+                        <%--<spring:bind path="topicalPrice.product.brand.name">--%>
+                        <%--<select class="selectpicker form-control" name="brand" title="${topicalPrice.product.brand.name}"--%>
                         <%--data-live-search="true">--%>
                         <%--<c:forEach items="${brands}" var="brand">--%>
                         <%--<option>${brand.name}</option>--%>
@@ -144,36 +145,35 @@
                 <div class=" form-group row">
                     <label class="col-md-1" style="text-align: right" for="model">Model</label>
                     <div class="col-md-8">
-                        <form:input path="productToEdit.model" class="form-control" type="text" name="model"
-                                    value="${productToEdit.model}" placeholder="Enter model here" id="model"/>
+                        <form:input path="topicalPrice.product.model" class="form-control" type="text" name="model"
+                                    value="${topicalPrice.product.model}" placeholder="Enter model here" id="model"/>
                     </div>
                     <div class="col-md-1"></div>
                 </div>
 
                 <div class="form-group row">
 
-                    <%--<form:hidden path="productToEdit.price.lastUpdated"/>--%>
+                    <%--<input hidden name="productToEditPriceValue" value="${productToEditPriceValue}"/>--%>
+                    <form:hidden path="topicalPrice.lastUpdated"/>
+                    <form:hidden path="topicalPrice.isTopical"/>
+                    <form:hidden path="topicalPrice.id"/>
 
                     <label class="col-md-1" style="text-align: right">Price</label>
 
                     <div class="col-md-5">
 
-                        <form:input path="productToEdit." class="form-control" type="text" name="price"
-                                    value="${productToEdit.getTopicalPrice().value}" placeholder="Enter price here" id="price"/>
-
-                        <form:select path="productToEdit.price.id" class="selectpicker form-control"
-                                     data-live-search="true"
-                                     title="${productToEdit.getTopicalPrice().value}">
-                            <form:options items="${prices}" itemValue="id" itemLabel="value"/>
-                        </form:select>
+                        <form:input path="topicalPrice.value" class="form-control" type="text"
+                                    value="${topicalPrice.value}"
+                                    placeholder="Enter price here" id="price"/>
+                        <%--path="topicalPrice.product.price.id"--%>
 
                     </div>
 
                     <div class="col-md-3">
                         <div class="form-group">
-                            <form:select path="productToEdit.price.currency.id" class="selectpicker form-control"
+                            <form:select path="topicalPrice.currency.id" class="selectpicker form-control"
                                          data-live-search="true" name="currency"
-                                         title="${productToEdit.getTopicalPrice().currency.name}">
+                                         title="${topicalPrice.currency.name}">
                                 <form:options items="${currencies}" itemValue="id" itemLabel="name"/>
                             </form:select>
                         </div>
@@ -220,9 +220,9 @@
                 <div class="col-md-1"></div>
                 <div class="col-md-8">
                     <div class="pull-left">
-                        <c:if test="${productToEdit.id != null}">
-                            <a href="./delete?id=${productToEdit.id}"
-                               onclick="return confirm('Are you sure want delete ${productToEdit.id} item?');"
+                        <c:if test="${topicalPrice.product.id != null}">
+                            <a href="./delete?productId=${topicalPrice.product.id}"
+                               onclick="return confirm('Are you sure want delete ${topicalPrice.product.id} item?');"
                                class="btn btn-lg btn-danger">
                                 <i class="fa fa-fw fa-trash"></i>
                             </a>
@@ -256,18 +256,6 @@
 </div>
 <%@include file="/WEB-INF/jsp/javascript.jsp" %>
 <script>
-
-    $('#add_type_form').on('submit', function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/productType/addProduct",
-            type: "POST",
-            data: $("add_type_form").serialize(),
-            success: function (data) {
-                alert("Successfully submitted.")
-            }
-        });
-    });
     sayHello = function () {
         $.ajax({
             url: "/productType/addProduct",
@@ -278,24 +266,6 @@
             }
         });
     };
-    $('#sendmail').submit(function () {
-        var that = this;
-        $('#response').html("<b>Loading response...</b>");
-        $.ajax({
-            type: 'POST',
-            url: 'proccess.php',
-            data: $(that).serialize()
-        })
-                .done(function (data) {
-                    $('#response').html(data);
-
-                })
-                .fail(function () {
-                    alert("Posting failed.");
-
-                });
-        return false;
-    });
 </script>
 </body>
 </html>

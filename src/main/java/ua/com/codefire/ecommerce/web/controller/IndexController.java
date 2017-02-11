@@ -43,7 +43,7 @@ public class IndexController {
 
         long totalProducts = productService.getProductsAmount();
         long remainder = totalProducts % amountByPage;
-        model.addAttribute("numberOfPages", (int)(Math.ceil(totalProducts / amountByPage) + remainder / 10));
+        model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
     }
@@ -80,29 +80,45 @@ public class IndexController {
 
 
     @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String getProductEditPage(@RequestParam int id, Model model) {
+    public String getProductEditPage(@RequestParam int productId, Model model) {
 
-        model.addAttribute("productToEdit", productService.getProduct(id));
+        Price productToEditTopicalPrice = priceService.getTopicalPrice(productId);
+
+        model.addAttribute("topicalPrice", productToEditTopicalPrice);
+
+        //model.addAttribute("productToEdit", productToEditTopicalPrice.getProduct());
         model.addAttribute("currencies", priceService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
         model.addAttribute("brands", productService.getAllBrands());
-        model.addAttribute("prices", priceService.getAllPrices());
+
+        model.addAttribute("productToEditPriceValue", productToEditTopicalPrice.getValue());
 
         return "products/edit";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String postUpdateProduct(@ModelAttribute Product product) {
+    public String postUpdateProduct(@ModelAttribute Price price) {
 
-        product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
-        product.getProductType().setName(productService.getProductTypeNameById(product.getProductType().getId()));
+        Price topicalPrice = priceService.getTopicalPrice(price.getProduct().getId());
+        if (topicalPrice.getValue() == price.getValue() && topicalPrice.getCurrency().getName().equals(price.getCurrency().getName())) {
+            topicalPrice.setLastUpdated(new Timestamp(System.currentTimeMillis()));
+        } else {
+            price.setId(null);
+            topicalPrice.setIsTopical(false);
+            priceService.createPrice(price);
+        }
 
-        productService.updateProduct(product);
+        priceService.updatePrice(topicalPrice);
+        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
+        price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
+        price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
+
+        productService.updateProduct(price.getProduct());
         return "redirect:/";
     }
 
     @RequestMapping(value = "/productType/addProduct", method = RequestMethod.POST)
-    public String postAddType(@ModelAttribute ProductType productType){
+    public String postAddType(@ModelAttribute ProductType productType) {
 
         productType.setName(productService.getProductTypeNameById(productType.getId()));
         productService.createProductType(productType);
@@ -161,11 +177,11 @@ public class IndexController {
         List<Integer> currencyIds = currencies.stream()
                 .map(Currency::getId)
                 .collect(Collectors.toList());
-        for(int i = 20; i < 100; i += 5) {
+        for (int i = 20; i < 100; i += 5) {
             int currencyId = ThreadLocalRandom.current().nextInt(Collections.min(currencyIds),
                     Collections.max(currencyIds) + 1);
             priceService.createPrice(
-                    new Price((double)i,
+                    new Price((double) i,
                             Timestamp.valueOf(LocalDateTime.now()),
                             currencies.stream()
                                     .filter(article -> article.getId() == currencyId)
@@ -188,7 +204,7 @@ public class IndexController {
         });
     }
 
-//    @ResponseBody
+    //    @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String index(@RequestParam Integer pageNumber, @RequestParam Integer amountPerPage, Model model) {
         List<Product> allProducts = productService.getProductsByPage(pageNumber, amountPerPage);
@@ -197,7 +213,7 @@ public class IndexController {
 
         long totalProducts = productService.getProductsAmount();
         long remainder = totalProducts % amountByPage;
-        model.addAttribute("numberOfPages", (int)(Math.ceil(totalProducts / amountByPage) + remainder / 10));
+        model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
     }

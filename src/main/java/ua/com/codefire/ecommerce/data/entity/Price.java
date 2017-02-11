@@ -26,7 +26,7 @@ public class Price {
     @Id
     @Column(name = "product_price_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     @Column(name="price_value")
     private Double value;
@@ -55,11 +55,11 @@ public class Price {
         this.currency = currency;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -87,11 +87,11 @@ public class Price {
         this.lastUpdated = lastUpdated;
     }
 
-    public boolean isTopical() {
+    public boolean getIsTopical() {
         return isTopical;
     }
 
-    public void setTopical(boolean topical) {
+    public void setIsTopical(boolean topical) {
         isTopical = topical;
     }
 
@@ -110,16 +110,23 @@ public class Price {
 
         Price price = (Price) o;
 
-        if (id != price.id) return false;
-        if (value != null ? !value.equals(price.value) : price.value != null) return false;
-        return lastUpdated != null ? lastUpdated.equals(price.lastUpdated) : price.lastUpdated == null;
+        if (isTopical != price.isTopical) return false;
+        if (getId() != null ? !getId().equals(price.getId()) : price.getId() != null) return false;
+        if (!getValue().equals(price.getValue())) return false;
+        if (!getLastUpdated().equals(price.getLastUpdated())) return false;
+        if (!getProduct().equals(price.getProduct())) return false;
+        return getCurrency().equals(price.getCurrency());
+
     }
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (value != null ? value.hashCode() : 0);
-        result = 31 * result + (lastUpdated != null ? lastUpdated.hashCode() : 0);
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + getValue().hashCode();
+        result = 31 * result + getLastUpdated().hashCode();
+        result = 31 * result + (isTopical ? 1 : 0);
+        result = 31 * result + getProduct().hashCode();
+        result = 31 * result + getCurrency().hashCode();
         return result;
     }
 }
