@@ -51,30 +51,33 @@ public class IndexController {
     @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String getCreateProductPage(Model model) {
 
-        Product productToEdit = new Product();
-        productToEdit.setProductType(new ProductType());
-        Price priceToEdit = new Price();
-        priceToEdit.setLastUpdated(new Timestamp(System.currentTimeMillis()));
-        priceToEdit.setCurrency(new Currency());
-        productToEdit.setBrand(new Brand());
+        Price topicalPrice = new Price();
+        topicalPrice.setCurrency(new Currency());
+        topicalPrice.setLastUpdated(new Timestamp(System.currentTimeMillis()));
+        topicalPrice.setProduct(new Product());
+        topicalPrice.getProduct().setProductType(new ProductType());
+        topicalPrice.getProduct().setBrand(new Brand());
 
-        model.addAttribute("productToEdit", productToEdit);
         model.addAttribute("currencies", priceService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
         model.addAttribute("brands", productService.getAllBrands());
-        model.addAttribute("prices", priceService.getAllPrices());
+        model.addAttribute("topicalPrice", topicalPrice);
 
         return "products/edit";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String postCreateProduct(@Validated @ModelAttribute Product product, BindingResult result) {
+    public String postCreateProduct(@Validated @ModelAttribute Price price, BindingResult result) {
 
-        product.getBrand().setName(productService.getBrandNameById(product.getBrand().getId()));
-        product.getProductType().setName(productService.getProductTypeNameById(product.getProductType().getId()));
+
+        price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
+        price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
+        productService.createProduct(price.getProduct());
+        price.setLastUpdated(new Timestamp(System.currentTimeMillis()));
+        price.setIsTopical(true);
 
         if (!result.hasErrors())
-            productService.createProduct(product);
+            priceService.createPrice(price);
         return "redirect:/";
     }
 
