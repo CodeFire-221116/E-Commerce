@@ -1,6 +1,13 @@
 package ua.com.codefire.ecommerce.data.entity;
 
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.CascadeType;
+
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import java.io.Serializable;
 import java.util.List;
 
@@ -21,6 +28,7 @@ public class Product implements Serializable {
     private Integer id;
 
     @OneToMany(mappedBy = "product")
+    @Cascade(CascadeType.ALL)
     private List<Price> prices;
 
     @ManyToOne

@@ -75,7 +75,7 @@
                                class="btn btn-md btn-warning">
                                 <i class="fa fa-fw fa-wrench"></i>
                             </a>
-                            <a href="./delete?id=${product.id}"
+                            <a href="./delete?productId=${product.id}"
                                onclick="return confirm('Are you sure want delete ${product.id} item?');"
                                class="btn btn-md btn-danger">
                                 <i class="fa fa-fw fa-trash"></i>

@@ -130,9 +130,9 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String postDeleteProduct(@RequestParam int id) {
+    public String postDeleteProduct(@RequestParam int productId) {
 
-        productService.deleteProduct(productService.getProduct(id));
+        productService.deleteProduct(productService.getProduct(productId));
 
         return "redirect:/";
     }
