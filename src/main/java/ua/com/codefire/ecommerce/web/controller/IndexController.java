@@ -83,17 +83,28 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String postCreateProduct(@Validated @ModelAttribute Price price, BindingResult result) {
+    public String postCreateProduct(@Validated @ModelAttribute Price price,
+                                    @RequestParam CommonsMultipartFile[] fileUpload, BindingResult result) {
 
-
+        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
         price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
         price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
-        productService.createProduct(price.getProduct());
+
         price.setLastUpdated(new Timestamp(System.currentTimeMillis()));
         price.setIsTopical(true);
 
-        if (!result.hasErrors())
+        if (fileUpload != null && fileUpload.length > 0) {
+            for (CommonsMultipartFile aFile : fileUpload) {
+                if (aFile.getSize() > 0) {
+                    price.getProduct().setPhoto(aFile.getBytes());
+                }
+            }
+        }
+
+        if (!result.hasErrors()) {
+            productService.createProduct(price.getProduct());
             priceService.createPrice(price);
+        }
         return "redirect:/";
     }
 
@@ -102,18 +113,16 @@ public class IndexController {
     public String getProductEditPage(@RequestParam int productId, Model model) {
 
         Price productToEditTopicalPrice = priceService.getTopicalPrice(productId);
-        if (productToEditTopicalPrice.getProduct().getPhoto() != null) {
 
+        if (productToEditTopicalPrice.getProduct().getPhoto() != null) {
             byte[] photo64 = Base64.getEncoder().encode(productToEditTopicalPrice.getProduct().getPhoto());
             model.addAttribute("productImage", new String(photo64));
-
         }
+
         model.addAttribute("topicalPrice", productToEditTopicalPrice);
-        //model.addAttribute("productToEdit", productToEditTopicalPrice.getProduct());
         model.addAttribute("currencies", priceService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
         model.addAttribute("brands", productService.getAllBrands());
-
         model.addAttribute("productToEditPriceValue", productToEditTopicalPrice.getValue());
 
         return "products/edit";
@@ -123,8 +132,22 @@ public class IndexController {
     public String postUpdateProduct(@ModelAttribute Price price, @RequestParam CommonsMultipartFile[] fileUpload) {
 
         Price topicalPrice = priceService.getTopicalPrice(price.getProduct().getId());
-
         byte[] photo = topicalPrice.getProduct().getPhoto();
+
+        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
+        price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
+        price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
+
+        if (fileUpload != null && fileUpload.length > 0) {
+            for (CommonsMultipartFile aFile : fileUpload) {
+                if (aFile.getSize() > 0) {
+                    price.getProduct().setPhoto(aFile.getBytes());
+                }
+            }
+            if (fileUpload[0].getSize() == 0) {
+                price.getProduct().setPhoto(photo);
+            }
+        }
 
         if (topicalPrice.getValue() == price.getValue() && topicalPrice.getCurrency().getName().equals(price.getCurrency().getName())) {
             topicalPrice.setLastUpdated(new Timestamp(System.currentTimeMillis()));
@@ -134,23 +157,9 @@ public class IndexController {
             priceService.createPrice(price);
         }
 
-        priceService.updatePrice(topicalPrice);
-        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
-        price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
-        price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
-
-        if (fileUpload != null && fileUpload.length > 0) {
-            for (CommonsMultipartFile aFile : fileUpload) {
-                if(aFile.getSize() > 0) {
-                    price.getProduct().setPhoto(aFile.getBytes());
-                }
-            }
-            if (fileUpload[0].getSize() == 0){
-                price.getProduct().setPhoto(photo);
-            }
-        }
-
         productService.updateProduct(price.getProduct());
+        priceService.updatePrice(topicalPrice);
+
         return "redirect:/";
     }
 
