@@ -18,33 +18,35 @@
 <%--<script type="text/javascript" src="/res/js/check_product.js"></script>onsubmit="return checkProduct()"--%>
 <div class="container">
 
-    <header class="page-header">
-        <h1>Edit Product</h1>
-    </header>
+
+    <div class="col-md-12">
+        <header class="page-header">
+            <h1>Edit Product</h1>
+        </header>
+    </div>
 
     <div class="row">
 
         <div class="col-md-1"></div>
-        <div class="col-md-10 col-md-offset-1">
+
+        <div class="col-md-10">
 
             <form name="edit_form" action="" method="post" enctype="multipart/form-data">
 
                 <div class="form-group row">
 
-                    <div class="col-md-1">
-                        <label class="col-md-1" style="text-align: right">Photo</label>
-                    </div>
+                    <label class="col-md-2" style="text-align: right">Photo</label>
 
                     <div class="col-md-4">
                         <img src="data:image/jpg;base64,${productImage}" alt=""
                              style="height: auto; width: auto; max-width: 200px; max-height: 200px;">
                     </div>
 
-                    <div class="col-md-4" style="text-align: right; vertical-align: text-bottom">
+                    <div class="col-md-3">
                         <div class="input-group">
                             <input type="text" class="form-control" readonly>
                             <label class="input-group-btn">
-                                <span class="glyphicon glyphicon-search btn btn-primary">
+                                <span class="glyphicon glyphicon-search btn btn-primary btn-md">
                                     <input type="file" name="fileUpload" style="display: none;" multiple>
                                 </span>
                             </label>
@@ -54,12 +56,11 @@
                     </div>
                 </div>
 
-
                 <div class="form-group row">
 
-                    <label class="col-md-1" style="text-align: right">Type</label>
+                    <label class="col-md-2" style="text-align: right">Type</label>
 
-                    <div class="col-md-8">
+                    <div class="col-md-7">
                         <form:hidden path="topicalPrice.product.id"/>
                         <form:select class="selectpicker form-control" path="topicalPrice.product.productType.id"
                                      title="${topicalPrice.product.productType.name}" data-live-search="true">
@@ -87,7 +88,6 @@
                                         </button>
                                     </div>
                                 </div>
-                                <%--<form id="add_type_form" name="add_type_form">--%>
 
                                 <div class="modal-body">
                                     <div class="row">
@@ -103,7 +103,6 @@
                                     <input type="button" class="btn btn-primary" onclick="sayHello()" title="Add"/>
                                 </div>
 
-                                <%--</form>--%>
                             </div>
                         </div>
 
@@ -111,24 +110,15 @@
                 </div>
 
                 <div class="form-group row">
-                    <%--<form: path="topicalPrice.product.brand.id"/>--%>
 
-                    <label class="col-md-1" style="text-align: right">Brand</label>
+                    <label class="col-md-2" style="text-align: right">Brand</label>
 
-                    <div class="col-md-8">
+                    <div class="col-md-7">
                         <form:select path="topicalPrice.product.brand.id" class="selectpicker form-control"
                                      title="${topicalPrice.product.brand.name}"
                                      data-live-search="true">
                             <form:options items="${brands}" itemValue="id" itemLabel="name"/>
                         </form:select>
-                        <%--<spring:bind path="topicalPrice.product.brand.name">--%>
-                        <%--<select class="selectpicker form-control" name="brand" title="${topicalPrice.product.brand.name}"--%>
-                        <%--data-live-search="true">--%>
-                        <%--<c:forEach items="${brands}" var="brand">--%>
-                        <%--<option>${brand.name}</option>--%>
-                        <%--</c:forEach>--%>
-                        <%--</select>--%>
-                        <%--</spring:bind>--%>
                     </div>
 
                     <div class="col-md-1">
@@ -170,8 +160,8 @@
                 </div>
 
                 <div class=" form-group row">
-                    <label class="col-md-1" style="text-align: right" for="model">Model</label>
-                    <div class="col-md-8">
+                    <label class="col-md-2" style="text-align: right" for="model">Model</label>
+                    <div class="col-md-7">
                         <form:input path="topicalPrice.product.model" class="form-control" type="text" name="model"
                                     value="${topicalPrice.product.model}" placeholder="Enter model here" id="model"/>
                     </div>
@@ -180,20 +170,17 @@
 
                 <div class="form-group row">
 
-                    <%--<input hidden name="productToEditPriceValue" value="${productToEditPriceValue}"/>--%>
                     <form:hidden path="topicalPrice.lastUpdated"/>
                     <form:hidden path="topicalPrice.isTopical"/>
                     <form:hidden path="topicalPrice.id"/>
 
-                    <label class="col-md-1" style="text-align: right">Price</label>
+                    <label class="col-md-2" style="text-align: right">Price</label>
 
-                    <div class="col-md-5">
+                    <div class="col-md-4">
 
                         <form:input path="topicalPrice.value" class="form-control" type="text"
                                     value="${topicalPrice.value}"
                                     placeholder="Enter price here" id="price"/>
-                        <%--path="topicalPrice.product.price.id"--%>
-
                     </div>
 
                     <div class="col-md-3">
@@ -244,8 +231,23 @@
                     </div>
                 </div>
 
-                <div class="col-md-1"></div>
-                <div class="col-md-8">
+                <div class="form-group row">
+
+                    <label class="col-md-2" style="text-align: right">Description</label>
+
+                    <div class="col-md-7">
+                        <form:textarea path="topicalPrice.product.description" class="form-control" type="text"
+                                       name="description" rows="6"
+                                       placeholder="Enter description here" id="description"/>
+                        <script>
+                            document.getElementById("description").defaultValue = "${topicalPrice.product.description}";
+                        </script>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-7">
                     <div class="pull-left">
                         <c:if test="${topicalPrice.product.id != null}">
                             <a href="./delete?productId=${topicalPrice.product.id}"

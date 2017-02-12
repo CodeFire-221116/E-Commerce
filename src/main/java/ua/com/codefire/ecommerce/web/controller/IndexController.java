@@ -124,6 +124,8 @@ public class IndexController {
 
         Price topicalPrice = priceService.getTopicalPrice(price.getProduct().getId());
 
+        byte[] photo = topicalPrice.getProduct().getPhoto();
+
         if (topicalPrice.getValue() == price.getValue() && topicalPrice.getCurrency().getName().equals(price.getCurrency().getName())) {
             topicalPrice.setLastUpdated(new Timestamp(System.currentTimeMillis()));
         } else {
@@ -139,9 +141,12 @@ public class IndexController {
 
         if (fileUpload != null && fileUpload.length > 0) {
             for (CommonsMultipartFile aFile : fileUpload) {
-                System.out.println("Saving file: " + aFile.getOriginalFilename());
-                price.getProduct().setPhoto(aFile.getBytes());
-                //productService.updateProduct(product);
+                if(aFile.getSize() > 0) {
+                    price.getProduct().setPhoto(aFile.getBytes());
+                }
+            }
+            if (fileUpload[0].getSize() == 0){
+                price.getProduct().setPhoto(photo);
             }
         }
 
