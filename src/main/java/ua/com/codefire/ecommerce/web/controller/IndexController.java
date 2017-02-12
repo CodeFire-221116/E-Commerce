@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -120,40 +121,40 @@ public class IndexController {
 
     @PostConstruct
     public void postConstruct() {
-//        initBrands("Apple", "Samsung", "Sony", "Lenovo");
-//        initCurrencies("$", "€", "円", "￥");
-//        initProductTypes("Mobile", "Notebook", "Furniture");
-//        initPrices();
-//        initProducts();
-    }
-
-    @RequestMapping(value = "/init", method = RequestMethod.GET)
-    public String initValues() {
         initBrands("Apple", "Samsung", "Sony", "Lenovo");
         initCurrencies("$", "€", "円", "￥");
         initProductTypes("Mobile", "Notebook", "Furniture");
-        initPrices();
-        initProducts();
-
-        return "redirect:/";
+        if (productService.getProductsAmount() == 0) {
+            initPrices();
+            initProducts();
+        }
     }
 
     private void initBrands(String... brands) {
-        for (String brand : brands) {
-            productService.createBrand(new Brand(brand));
-        }
+        List<String> brandsList = productService.getAllBrands().stream()
+                .map(Brand::getName)
+                .collect(Collectors.toList());
+        Arrays.asList(brands).stream()
+                .filter(s -> !brandsList.contains(s))
+                .forEach(s -> productService.createBrand(new Brand(s)) );
     }
 
     private void initCurrencies(String... currencies) {
-        for (String currency : currencies) {
-            priceService.createCurrency(new Currency(currency));
-        }
+        List<String> currenciesList = productService.getAllCurrencies().stream()
+                .map(Currency::getName)
+                .collect(Collectors.toList());
+        Arrays.asList(currencies).stream()
+                .filter(s -> !currenciesList.contains(s))
+                .forEach(s -> priceService.createCurrency(new Currency(s)) );
     }
 
     private void initProductTypes(String... productTypes) {
-        for (String productType : productTypes) {
-            productService.createProductType(new ProductType(productType));
-        }
+        List<String> productTypesList = productService.getAllProductTypes().stream()
+                .map(ProductType::getName)
+                .collect(Collectors.toList());
+        Arrays.asList(productTypes).stream()
+                .filter(s -> !productTypesList.contains(s))
+                .forEach(s -> productService.createProductType(new ProductType(s)) );
     }
 
     private void initPrices() {
