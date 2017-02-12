@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import ua.com.codefire.ecommerce.data.entity.*;
 import ua.com.codefire.ecommerce.data.entity.Currency;
 import ua.com.codefire.ecommerce.data.repo.*;
@@ -13,6 +14,7 @@ import ua.com.codefire.ecommerce.data.service.PriceService;
 import ua.com.codefire.ecommerce.data.service.ProductService;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -34,6 +36,20 @@ public class IndexController {
             "SamsungMac", "SamsungTV"));
 
     public static final int amountByPage = 20;
+
+//    @RequestMapping(value = "/doUpload", method = RequestMethod.POST)
+//    public String handleFileUpload(@RequestParam CommonsMultipartFile[] fileUpload) throws Exception {
+//
+//        if (fileUpload != null && fileUpload.length > 0) {
+//            for (CommonsMultipartFile aFile : fileUpload) {
+//                System.out.println("Saving file: " + aFile.getOriginalFilename());
+//                Product product = new Product();
+//                product.setPhoto(aFile.getBytes());
+//                productService.updateProduct(product);
+//            }
+//        }
+//        return "Success";
+//    }
 
     @RequestMapping({"/", "/index"})
     public String getIndex(Model model) {
@@ -86,9 +102,13 @@ public class IndexController {
     public String getProductEditPage(@RequestParam int productId, Model model) {
 
         Price productToEditTopicalPrice = priceService.getTopicalPrice(productId);
+        if (productToEditTopicalPrice.getProduct().getPhoto() != null) {
 
+            byte[] photo64 = Base64.getEncoder().encode(productToEditTopicalPrice.getProduct().getPhoto());
+            model.addAttribute("productImage", new String(photo64));
+
+        }
         model.addAttribute("topicalPrice", productToEditTopicalPrice);
-
         //model.addAttribute("productToEdit", productToEditTopicalPrice.getProduct());
         model.addAttribute("currencies", priceService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
@@ -100,9 +120,10 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String postUpdateProduct(@ModelAttribute Price price) {
+    public String postUpdateProduct(@ModelAttribute Price price, @RequestParam CommonsMultipartFile[] fileUpload) {
 
         Price topicalPrice = priceService.getTopicalPrice(price.getProduct().getId());
+
         if (topicalPrice.getValue() == price.getValue() && topicalPrice.getCurrency().getName().equals(price.getCurrency().getName())) {
             topicalPrice.setLastUpdated(new Timestamp(System.currentTimeMillis()));
         } else {
@@ -115,6 +136,14 @@ public class IndexController {
         price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
         price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
         price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
+
+        if (fileUpload != null && fileUpload.length > 0) {
+            for (CommonsMultipartFile aFile : fileUpload) {
+                System.out.println("Saving file: " + aFile.getOriginalFilename());
+                price.getProduct().setPhoto(aFile.getBytes());
+                //productService.updateProduct(product);
+            }
+        }
 
         productService.updateProduct(price.getProduct());
         return "redirect:/";

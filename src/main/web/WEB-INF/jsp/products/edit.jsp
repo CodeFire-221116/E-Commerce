@@ -26,7 +26,34 @@
 
         <div class="col-md-1"></div>
         <div class="col-md-10 col-md-offset-1">
-            <form name="edit_form" action="" method="post">
+
+            <form name="edit_form" action="" method="post" enctype="multipart/form-data">
+
+                <div class="form-group row">
+
+                    <div class="col-md-1">
+                        <label class="col-md-1" style="text-align: right">Photo</label>
+                    </div>
+
+                    <div class="col-md-4">
+                        <img src="data:image/jpg;base64,${productImage}" alt=""
+                             style="height: auto; width: auto; max-width: 200px; max-height: 200px;">
+                    </div>
+
+                    <div class="col-md-4" style="text-align: right; vertical-align: text-bottom">
+                        <div class="input-group">
+                            <input type="text" class="form-control" readonly>
+                            <label class="input-group-btn">
+                                <span class="glyphicon glyphicon-search btn btn-primary">
+                                    <input type="file" name="fileUpload" style="display: none;" multiple>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                    </div>
+                </div>
+
 
                 <div class="form-group row">
 
@@ -255,6 +282,36 @@
     </c:if>
 </div>
 <%@include file="/WEB-INF/jsp/javascript.jsp" %>
+<script>
+    $(function () {
+
+        // We can attach the `fileselect` event to all file inputs on the page
+        $(document).on('change', ':file', function () {
+            var input = $(this),
+                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+            input.trigger('fileselect', [numFiles, label]);
+        });
+
+        // We can watch for our custom `fileselect` event like this
+        $(document).ready(function () {
+            $(':file').on('fileselect', function (event, numFiles, label) {
+
+                var input = $(this).parents('.input-group').find(':text'),
+                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+
+                if (input.length) {
+                    input.val(log);
+                } else {
+                    if (log) alert(log);
+                }
+
+            });
+        });
+
+    });
+</script>
+
 <script>
     sayHello = function () {
         $.ajax({
