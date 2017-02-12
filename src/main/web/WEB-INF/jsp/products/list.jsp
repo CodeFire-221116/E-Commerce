@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>PostData</title>
-    <%@include file="/WEB-INF/jsp/stylesheet.jsp" %>
+    <%@include file="/WEB-INF/jsp/common/stylesheet.jsp" %>
     <style>
         .pagination {
             display: inline-block;
@@ -26,8 +26,8 @@
     </style>
 </head>
 <body>
+<%@include file="/WEB-INF/jsp/common/menu.jsp" %>
 <div class="container">
-
     <header class="page-header">
         <h1>Products</h1>
     </header>
@@ -89,31 +89,9 @@
 
         <div class="col-md-2"></div>
     </div>
-
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-6">
-            <ul class="pagination">
-                <li class="${empty param.pageNumber or param.pageNumber le 1 ?'disabled':''}">
-                    <a href="/">&laquo;</a>
-                    <%--<input type="button" onclick="getListForPage(1)">--%>
-                </li>
-                <c:forEach var="i" begin="1" end="${numberOfPages}">
-                    <li>
-                        <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
-                            <%--<input type="button" onclick="getListForPage(${i})">--%>
-                    </li>
-                </c:forEach>
-                <li class="${param.pageNumber ge numberOfPages ? 'disabled': ''}">
-                    <a href="/list?pageNumber=${numberOfPages}&amountPerPage=20" >&raquo;</a>
-                    <%--<input type="button" onclick="getListForPage(${numberOfPages})">--%>
-                </li>
-            </ul>
-        </div>
-        <div class="col-md-2"></div>
-    </div>
+    <%@include file="/WEB-INF/jsp/common/pagination.jsp" %>
 </div>
-<%@include file="/WEB-INF/jsp/javascript.jsp" %>
+<%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
 <script>
     getListForPage = function (pageNumber) {
         var amountByPage = 20;

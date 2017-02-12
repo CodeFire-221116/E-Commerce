@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
@@ -23,6 +24,7 @@ import java.util.Properties;
 @Configuration
 @EnableTransactionManagement
 @ComponentScan("ua.com.codefire.ecommerce.data")
+@EnableJpaRepositories("ua.com.codefire.ecommerce.data.jpa_repo")
 public class DataConfig {
 
     @Autowired
@@ -40,23 +42,23 @@ public class DataConfig {
     }
 
     @Bean
-    public LocalContainerEntityManagerFactoryBean getEntityManagerFactory() {
-        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+        LocalContainerEntityManagerFactoryBean entityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
 
         Properties props = new Properties();
         props.put("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));
         props.put("hibernate.enable_lazy_load_no_trans", env.getProperty("hibernate.enable_lazy_load_no_trans"));
-        factory.setJpaProperties(props);
+        entityManagerFactoryBean.setJpaProperties(props);
 
-        factory.setPersistenceProvider(new HibernatePersistenceProvider());
-        factory.setPackagesToScan("ua.com.codefire.ecommerce.data.entity");
-        factory.setDataSource(getDataSource());
+        entityManagerFactoryBean.setPersistenceProvider(new HibernatePersistenceProvider());
+        entityManagerFactoryBean.setPackagesToScan("ua.com.codefire.ecommerce.data.entity");
+        entityManagerFactoryBean.setDataSource(getDataSource());
 
-        return factory;
+        return entityManagerFactoryBean;
     }
 
     @Bean
-    public JpaTransactionManager getTransactionManager() {
+    public JpaTransactionManager transactionManager() {
         return new JpaTransactionManager();
     }
 }

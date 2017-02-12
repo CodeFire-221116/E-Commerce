@@ -12,7 +12,7 @@
 <html>
 <head>
     <title>PostData</title>
-    <%@include file="/WEB-INF/jsp/stylesheet.jsp" %>
+    <%@include file="/WEB-INF/jsp/common/stylesheet.jsp" %>
 </head>
 <body>
 <%--<script type="text/javascript" src="/res/js/check_product.js"></script>onsubmit="return checkProduct()"--%>
@@ -254,7 +254,7 @@
         </div>
     </c:if>
 </div>
-<%@include file="/WEB-INF/jsp/javascript.jsp" %>
+<%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
 <script>
     sayHello = function () {
         $.ajax({

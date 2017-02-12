@@ -55,6 +55,14 @@ public class Price {
         this.currency = currency;
     }
 
+    public Price(Double value, Timestamp lastUpdated, boolean isTopical, Product product, Currency currency) {
+        this.value = value;
+        this.lastUpdated = lastUpdated;
+        this.isTopical = isTopical;
+        this.product = product;
+        this.currency = currency;
+    }
+
     public Integer getId() {
         return id;
     }

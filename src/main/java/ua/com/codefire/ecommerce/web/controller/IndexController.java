@@ -11,6 +11,7 @@ import ua.com.codefire.ecommerce.data.entity.Currency;
 import ua.com.codefire.ecommerce.data.repo.*;
 import ua.com.codefire.ecommerce.data.service.PriceService;
 import ua.com.codefire.ecommerce.data.service.ProductService;
+import ua.com.codefire.ecommerce.data.service.UserService;
 
 import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
@@ -28,12 +29,14 @@ public class IndexController {
     private ProductService productService;
     @Autowired
     private PriceService priceService;
+    @Autowired
+    private UserService userService;
 
     private static final List<String> productModels = new ArrayList<>(Arrays.asList("IPhone", "IPode",
             "IChair", "ITable", "IMac", "ITV", "SamsungPhone", "SamsungPode", "SamsungChair", "SamsungTable",
             "SamsungMac", "SamsungTV"));
 
-    public static final int amountByPage = 20;
+    private static final int amountByPage = 20;
 
     @RequestMapping({"/", "/index"})
     public String getIndex(Model model) {
@@ -153,6 +156,7 @@ public class IndexController {
         initProductTypes("Mobile", "Notebook", "Furniture");
         initPrices();
         initProducts();
+        initUsers();
 
         return "redirect:/";
     }
@@ -177,6 +181,7 @@ public class IndexController {
 
     private void initPrices() {
         List<Currency> currencies = priceService.getAllCurrencies();
+        List<Product> products = productService.getAllProducts();
         List<Integer> currencyIds = currencies.stream()
                 .map(Currency::getId)
                 .collect(Collectors.toList());
@@ -207,7 +212,15 @@ public class IndexController {
         });
     }
 
-    //    @ResponseBody
+    private void initUsers() {
+        for (int i = 0; i < 100; i++) {
+            User newUser = new User("test" + 1, "12345", "test" + i + "@gmail.com",
+                    User.AccessLevel.User);
+            userService.create(newUser);
+        }
+    }
+
+//    @ResponseBody
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String index(@RequestParam Integer pageNumber, @RequestParam Integer amountPerPage, Model model) {
         List<Product> allProducts = productService.getProductsByPage(pageNumber, amountPerPage);
