@@ -11,7 +11,7 @@
 <html>
 <head>
     <title>PostData</title>
-    <%@include file="/WEB-INF/jsp/stylesheet.jsp" %>
+    <%@include file="/WEB-INF/jsp/common/stylesheet.jsp" %>
     <style>
         .pagination {
             display: inline-block;
@@ -27,7 +27,6 @@
 </head>
 <body>
 <div class="container">
-
     <header class="page-header">
         <h1>Products</h1>
     </header>
@@ -47,7 +46,7 @@
             </div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-10">
 
             <table class="table table-striped">
                 <thead>
@@ -56,8 +55,8 @@
                     <th>Model</th>
                     <th>Type</th>
                     <th>Brand</th>
-                    <%--<th>Price</th>--%>
-                    <%--<th>Last update</th>--%>
+                    <th>Price</th>
+                    <th>Last update</th>
                     <th style="width: 1%"></th>
                 </tr>
                 </thead>
@@ -68,8 +67,8 @@
                         <td>${product.model}</td>
                         <td>${product.productType.name}</td>
                         <td>${product.brand.name}</td>
-                            <%--<td>${product.price.value} ${product.price.currency.name}</td>--%>
-                            <%--<td>${product.price.lastUpdated}</td>--%>
+                        <td>${product.findTopicalPrice().value} ${product.findTopicalPrice().currency.name}</td>
+                        <td>${product.findTopicalPrice().lastUpdated}</td>
                         <td nowrap>
                             <a href="./edit?productId=${product.id}"
                                class="btn btn-md btn-warning">
@@ -87,85 +86,32 @@
             </table>
         </div>
 
-        <div class="col-md-2"></div>
     </div>
-
-
-    <%--<div class="row">--%>
-
-    <%--<div class="col-md-3">--%>
-    <%--<div class="panel panel-default">--%>
-    <%--<div class="panel-body">--%>
-    <%--<a class="fancyimage" data-fancybox-group="group" href="data:image/jpg;base64,${productImage}">--%>
-    <%--<img src="data:image/jpg;base64,${productImage}" alt=""--%>
-    <%--style="height: auto; width: auto; max-width: 200px; max-height: 200px;">--%>
-    <%--</a>--%>
-    <%--</div>--%>
-    <%--<div class="panel-footer">--%>
-    <%--<p>--%>
-
-    <%--</p>--%>
-    <%--</div>--%>
-    <%--</div>--%>
-    <%--</div>--%>
-
-    <%--</div>--%>
-
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $("a.fancyimage").fancybox();
-        });
-        $(function () {
-
-            // We can attach the `fileselect` event to all file inputs on the page
-            $(document).on('change', ':file', function () {
-                var input = $(this),
-                        numFiles = input.get(0).files ? input.get(0).files.length : 1,
-                        label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
-                input.trigger('fileselect', [numFiles, label]);
-            });
-
-            // We can watch for our custom `fileselect` event like this
-            $(document).ready(function () {
-                $(':file').on('fileselect', function (event, numFiles, label) {
-
-                    var input = $(this).parents('.input-group').find(':text'),
-                            log = numFiles > 1 ? numFiles + ' files selected' : label;
-
-                    if (input.length) {
-                        input.val(log);
-                    } else {
-                        if (log) alert(log);
-                    }
-                });
-            });
-        });
-    </script>
-
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-6">
             <ul class="pagination">
                 <li class="${empty param.pageNumber or param.pageNumber le 1 ?'disabled':''}">
-                    <a href="/">&laquo;</a>
+                    <a href="./">&laquo;</a>
                     <%--<input type="button" onclick="getListForPage(1)">--%>
                 </li>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
                     <li>
-                        <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
+                        <a href="./list?pageNumber=${i}&amountPerPage=20">${i}</a>
                             <%--<input type="button" onclick="getListForPage(${i})">--%>
                     </li>
                 </c:forEach>
                 <li class="${param.pageNumber ge numberOfPages ? 'disabled': ''}">
-                    <a href="/list?pageNumber=${numberOfPages}&amountPerPage=20">&raquo;</a>
+                    <a href="./list?pageNumber=${numberOfPages}&amountPerPage=20" >&raquo;</a>
                     <%--<input type="button" onclick="getListForPage(${numberOfPages})">--%>
                 </li>
             </ul>
         </div>
         <div class="col-md-2"></div>
     </div>
+    <%--<%@include file="/WEB-INF/jsp/common/pagination.jsp" %>--%>
 </div>
-<%@include file="/WEB-INF/jsp/javascript.jsp" %>
+<%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
 <script>
     getListForPage = function (pageNumber) {
         var amountByPage = 20;

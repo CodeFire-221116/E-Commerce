@@ -37,31 +37,40 @@ public class IndexController {
 
     public static final int amountByPage = 20;
 
-//    @RequestMapping(value = "/doUpload", method = RequestMethod.POST)
-//    public String handleFileUpload(@RequestParam CommonsMultipartFile[] fileUpload) throws Exception {
-//
-//        if (fileUpload != null && fileUpload.length > 0) {
-//            for (CommonsMultipartFile aFile : fileUpload) {
-//                System.out.println("Saving file: " + aFile.getOriginalFilename());
-//                Product product = new Product();
-//                product.setPhoto(aFile.getBytes());
-//                productService.updateProduct(product);
-//            }
-//        }
-//        return "Success";
-//    }
-
     @RequestMapping({"/", "/index"})
     public String getIndex(Model model) {
         List<Product> productsByPage = productService.getProductsByPage(1, amountByPage);
-        model.addAttribute("products", productsByPage);
-        model.addAttribute("totalProductsCount", productService.getProductsAmount());
-
         long totalProducts = productService.getProductsAmount();
         long remainder = totalProducts % amountByPage;
+
+        model.addAttribute("products", productsByPage);
+        model.addAttribute("totalProductsCount", productService.getProductsAmount());
         model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
+    }
+
+    @RequestMapping("/products")
+    public String getProducts(Model model) {
+        List<Product> productsByPage = productService.getProductsByPage(1, amountByPage);
+        Map<Product, String> productPhoto = new HashMap<>();
+
+        for (Product product: productsByPage) {
+            if (product.getPhoto() != null) {
+                byte[] photo64 = Base64.getEncoder().encode(product.getPhoto());
+                productPhoto.put(product, new String(photo64));
+            } else productPhoto.put(product, "");
+        }
+
+        long totalProducts = productService.getProductsAmount();
+        long remainder = totalProducts % amountByPage;
+
+        model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
+        model.addAttribute("photo", productPhoto);
+        model.addAttribute("products", productsByPage);
+        model.addAttribute("totalProductsCount", productService.getProductsAmount());
+
+        return "products/productsTable";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
