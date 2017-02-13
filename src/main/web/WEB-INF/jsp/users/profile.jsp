@@ -9,9 +9,12 @@
 <html>
 <head>
     <title>Title</title>
+    <%@include file="/WEB-INF/jsp/common/stylesheet.jsp" %>
 </head>
 <body>
 <%@include file="/WEB-INF/jsp/common/menu.jsp" %>
+<%@include file="/WEB-INF/jsp/users/userProfilePartials/user_profile_partial.jsp" %>
 
+<%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
 </body>
 </html>

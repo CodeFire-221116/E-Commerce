@@ -10,7 +10,7 @@ import ua.com.codefire.ecommerce.data.entity.User;
  */
 @Repository
 public interface UserRepo extends JpaRepository<User, Integer> {
-//    User findByUsername(String userName);
+    User findByUsername(String userName);
 //
 //    @Query("SELECT COUNT(user.id) FROM User user")
 //    int getUserAmount();

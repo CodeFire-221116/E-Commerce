@@ -62,17 +62,15 @@
                                 <span class="btn-addon">@</span></div>
                         </td>-->
                         <td class="text-right" nowrap>
-                            <c:if test="${$CURR_USER.canChangeAccessLvl(item.accessLvl)}">
-                                <a href="./edit?id=${item.id}"
-                                   class="btn btn-sm btn-warning">
-                                    <i class="fa fa-fw fa-wrench"></i>
-                                </a>
+                            <a href="./edit?id=${item.id}"
+                               class="btn btn-sm btn-warning">
+                                <i class="fa fa-fw fa-wrench"></i>
+                            </a>
 
-                                <a href="./delete?id=${item.id}"
-                                   class="btn btn-sm btn-danger">
-                                    <i class="fa fa-fw fa-trash"></i>
-                                </a>
-                            </c:if>
+                            <a href="./delete?id=${item.id}"
+                               class="btn btn-sm btn-danger">
+                                <i class="fa fa-fw fa-trash"></i>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -82,7 +80,29 @@
 
         <div class="col-md-2"></div>
     </div>
-    <%@include file="/WEB-INF/jsp/common/pagination.jsp" %>
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-6">
+            <ul class="pagination">
+                <li class="${empty param.pageNumber or param.pageNumber le 1 ?'disabled':''}">
+                    <a href="/users/">&laquo;</a>
+                    <%--<input type="button" onclick="getListForPage(1)">--%>
+                </li>
+                <c:forEach var="i" begin="1" end="${numberOfPages}">
+                    <li>
+                        <a href="/users/list?pageNumber=${i}&amountPerPage=20">${i}</a>
+                            <%--<input type="button" onclick="getListForPage(${i})">--%>
+                    </li>
+                </c:forEach>
+                <li class="${param.pageNumber ge numberOfPages ? 'disabled': ''}">
+                    <a href="/users/list?pageNumber=${numberOfPages}&amountPerPage=20" >&raquo;</a>
+                    <%--<input type="button" onclick="getListForPage(${numberOfPages})">--%>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <%--<%@include file="/WEB-INF/jsp/common/pagination.jsp" %>--%>
 </div>
 <%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
 </body>

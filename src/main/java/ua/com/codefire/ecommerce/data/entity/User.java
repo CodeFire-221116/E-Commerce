@@ -15,7 +15,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Integer id;
-    @Column(name = "user_name")
+    @Column(name = "user_name", unique = true)
     private String username;
     // MD5 HASH
     @Column(name = "user_pass", length = 32)

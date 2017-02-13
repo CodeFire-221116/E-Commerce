@@ -1,5 +1,6 @@
 package ua.com.codefire.ecommerce.data.service;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.PageRequest;
@@ -27,6 +28,7 @@ public class UserService {
 
     public User create(User objToCreate) {
         try {
+            objToCreate.setPassword(DigestUtils.md5Hex(objToCreate.getPassword()));
             return userRepo.saveAndFlush(objToCreate);
         } catch (SQLWarningException ex) {
             LOGGER.log(Level.SEVERE, "Spring-specific exception", ex);
@@ -83,8 +85,7 @@ public class UserService {
     }
 
     public User getUserByName(String name) {
-//        return userRepo.findByUsername(name);
-        return new User();
+        return userRepo.findByUsername(name);
     }
 
     public Boolean ifUserRegistered(String name, String password) {
@@ -105,8 +106,8 @@ public class UserService {
         return userByName.checkPassword(password);
     }
 
-    public List<User> getProductsByPage(int pageNumber, int amountByPage) {
-        Pageable pageable = new PageRequest(pageNumber, pageNumber + amountByPage - 1);
+    public List<User> getUsersByPage(int pageNumber, int amountByPage) {
+        Pageable pageable = new PageRequest(pageNumber - 1, pageNumber + amountByPage - 1);
         return userRepo.findAll(pageable).getContent();
     }
 }

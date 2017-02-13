@@ -23,18 +23,18 @@
                         <li ${page_type.equals('products') ? 'class="active"' : ''}><a href="/index">Products</a></li>
                         <li ${page_type.equals('pages') ? 'class="active"' : ''}><a href="/users/">Users</a></li>
                     </ul>
-                    <%--<ul class="nav navbar-nav navbar-right">--%>
-                        <%--<c:choose>--%>
-                            <%--<c:when test="${$CURR_USER != null}">--%>
-                                <%--<li><a href="/profile"><span class="glyphicon glyphicon-user"></span> ${$CURR_USER.username}</a></li>--%>
-                                <%--<li><a href="/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>--%>
-                            <%--</c:when>--%>
-                            <%--<c:otherwise>--%>
-                                <%--<li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>--%>
-                                <%--<li><a href="/auth"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>--%>
-                            <%--</c:otherwise>--%>
-                        <%--</c:choose>--%>
-                    <%--</ul>--%>
+                    <ul class="nav navbar-nav navbar-right">
+                        <c:choose>
+                            <c:when test="${$CURR_USER != null}">
+                                <li><a href="/users/profile"><span class="glyphicon glyphicon-user"></span> ${$CURR_USER.username}</a></li>
+                                <li><a href="/users/logout"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                            </c:when>
+                            <c:otherwise>
+                                <li><a href="/register"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                                <li><a href="/auth"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                            </c:otherwise>
+                        </c:choose>
+                    </ul>
                 </div>
             </div>
         </nav>

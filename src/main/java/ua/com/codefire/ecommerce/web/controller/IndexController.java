@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.com.codefire.ecommerce.data.entity.*;
 import ua.com.codefire.ecommerce.data.entity.Currency;
-import ua.com.codefire.ecommerce.data.repo.*;
 import ua.com.codefire.ecommerce.data.service.PriceService;
 import ua.com.codefire.ecommerce.data.service.ProductService;
 import ua.com.codefire.ecommerce.data.service.UserService;
@@ -49,6 +48,11 @@ public class IndexController {
         model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.GET)
+    public String getRegister() {
+        return "common/registration";
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.GET)
@@ -214,7 +218,7 @@ public class IndexController {
 
     private void initUsers() {
         for (int i = 0; i < 100; i++) {
-            User newUser = new User("test" + 1, "12345", "test" + i + "@gmail.com",
+            User newUser = new User("test" + i, "12345", "test" + i + "@gmail.com",
                     User.AccessLevel.User);
             userService.create(newUser);
         }
@@ -231,6 +235,6 @@ public class IndexController {
         long remainder = totalProducts % amountByPage;
         model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
-        return "products/list";
+        return "users/list";
     }
 }
