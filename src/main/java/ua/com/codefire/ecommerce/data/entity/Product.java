@@ -31,6 +31,14 @@ public class Product implements Serializable {
     @Cascade(CascadeType.ALL)
     private List<Price> prices;
 
+    @Lob
+    @Column
+    private String description;
+
+    @Lob
+    @Column(length = 20971520)
+    private byte[] photo;
+
     @ManyToOne
     @JoinColumn(name = "product_type_id")
     private ProductType productType;
@@ -55,6 +63,7 @@ public class Product implements Serializable {
     }
 
     public Product() {
+
     }
 
     public Product(ProductType productType, Brand brand, String model) {
@@ -101,6 +110,22 @@ public class Product implements Serializable {
 
     public void setPrices(List<Price> prices) {
         this.prices = prices;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public byte[] getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(byte[] photo) {
+        this.photo = photo;
     }
 
     @Override

@@ -47,7 +47,7 @@
             </div>
         </div>
 
-        <div class="col-md-8">
+        <div class="col-md-10">
 
             <table class="table table-striped">
                 <thead>
@@ -56,8 +56,8 @@
                     <th>Model</th>
                     <th>Type</th>
                     <th>Brand</th>
-                    <%--<th>Price</th>--%>
-                    <%--<th>Last update</th>--%>
+                    <th>Price</th>
+                    <th>Last update</th>
                     <th style="width: 1%"></th>
                 </tr>
                 </thead>
@@ -68,8 +68,8 @@
                         <td>${product.model}</td>
                         <td>${product.productType.name}</td>
                         <td>${product.brand.name}</td>
-                            <%--<td>${product.price.value} ${product.price.currency.name}</td>--%>
-                            <%--<td>${product.price.lastUpdated}</td>--%>
+                        <td>${product.findTopicalPrice().value} ${product.findTopicalPrice().currency.name}</td>
+                        <td>${product.findTopicalPrice().lastUpdated}</td>
                         <td nowrap>
                             <a href="./edit?productId=${product.id}"
                                class="btn btn-md btn-warning">
@@ -87,7 +87,6 @@
             </table>
         </div>
 
-        <div class="col-md-2"></div>
     </div>
     <div class="row">
         <div class="col-md-4"></div>

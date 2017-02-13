@@ -6,6 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import ua.com.codefire.ecommerce.data.entity.*;
 import ua.com.codefire.ecommerce.data.entity.Currency;
 import ua.com.codefire.ecommerce.data.service.PriceService;
@@ -13,6 +14,7 @@ import ua.com.codefire.ecommerce.data.service.ProductService;
 import ua.com.codefire.ecommerce.data.service.UserService;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -40,14 +42,37 @@ public class IndexController {
     @RequestMapping({"/", "/index"})
     public String getIndex(Model model) {
         List<Product> productsByPage = productService.getProductsByPage(1, amountByPage);
-        model.addAttribute("products", productsByPage);
-        model.addAttribute("totalProductsCount", productService.getProductsAmount());
-
         long totalProducts = productService.getProductsAmount();
         long remainder = totalProducts % amountByPage;
+
+        model.addAttribute("products", productsByPage);
+        model.addAttribute("totalProductsCount", productService.getProductsAmount());
         model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
+    }
+
+    @RequestMapping("/products")
+    public String getProducts(Model model) {
+        List<Product> productsByPage = productService.getProductsByPage(1, amountByPage);
+        Map<Product, String> productPhoto = new HashMap<>();
+
+        for (Product product: productsByPage) {
+            if (product.getPhoto() != null) {
+                byte[] photo64 = Base64.getEncoder().encode(product.getPhoto());
+                productPhoto.put(product, new String(photo64));
+            } else productPhoto.put(product, "");
+        }
+
+        long totalProducts = productService.getProductsAmount();
+        long remainder = totalProducts % amountByPage;
+
+        model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
+        model.addAttribute("photo", productPhoto);
+        model.addAttribute("products", productsByPage);
+        model.addAttribute("totalProductsCount", productService.getProductsAmount());
+
+        return "products/productsTable";
     }
 
     @RequestMapping(value = "/register", method = RequestMethod.GET)
@@ -74,17 +99,28 @@ public class IndexController {
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public String postCreateProduct(@Validated @ModelAttribute Price price, BindingResult result) {
+    public String postCreateProduct(@Validated @ModelAttribute Price price,
+                                    @RequestParam CommonsMultipartFile[] fileUpload, BindingResult result) {
 
-
+        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
         price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
         price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
-        productService.createProduct(price.getProduct());
+
         price.setLastUpdated(new Timestamp(System.currentTimeMillis()));
         price.setIsTopical(true);
 
-        if (!result.hasErrors())
+        if (fileUpload != null && fileUpload.length > 0) {
+            for (CommonsMultipartFile aFile : fileUpload) {
+                if (aFile.getSize() > 0) {
+                    price.getProduct().setPhoto(aFile.getBytes());
+                }
+            }
+        }
+
+        if (!result.hasErrors()) {
+            productService.createProduct(price.getProduct());
             priceService.createPrice(price);
+        }
         return "redirect:/";
     }
 
@@ -94,22 +130,41 @@ public class IndexController {
 
         Price productToEditTopicalPrice = priceService.getTopicalPrice(productId);
 
-        model.addAttribute("topicalPrice", productToEditTopicalPrice);
+        if (productToEditTopicalPrice.getProduct().getPhoto() != null) {
+            byte[] photo64 = Base64.getEncoder().encode(productToEditTopicalPrice.getProduct().getPhoto());
+            model.addAttribute("productImage", new String(photo64));
+        }
 
-        //model.addAttribute("productToEdit", productToEditTopicalPrice.getProduct());
+        model.addAttribute("topicalPrice", productToEditTopicalPrice);
         model.addAttribute("currencies", priceService.getAllCurrencies());
         model.addAttribute("types", productService.getAllProductTypes());
         model.addAttribute("brands", productService.getAllBrands());
-
         model.addAttribute("productToEditPriceValue", productToEditTopicalPrice.getValue());
 
         return "products/edit";
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String postUpdateProduct(@ModelAttribute Price price) {
+    public String postUpdateProduct(@ModelAttribute Price price, @RequestParam CommonsMultipartFile[] fileUpload) {
 
         Price topicalPrice = priceService.getTopicalPrice(price.getProduct().getId());
+        byte[] photo = topicalPrice.getProduct().getPhoto();
+
+        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
+        price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
+        price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
+
+        if (fileUpload != null && fileUpload.length > 0) {
+            for (CommonsMultipartFile aFile : fileUpload) {
+                if (aFile.getSize() > 0) {
+                    price.getProduct().setPhoto(aFile.getBytes());
+                }
+            }
+            if (fileUpload[0].getSize() == 0) {
+                price.getProduct().setPhoto(photo);
+            }
+        }
+
         if (topicalPrice.getValue() == price.getValue() && topicalPrice.getCurrency().getName().equals(price.getCurrency().getName())) {
             topicalPrice.setLastUpdated(new Timestamp(System.currentTimeMillis()));
         } else {
@@ -118,12 +173,9 @@ public class IndexController {
             priceService.createPrice(price);
         }
 
-        priceService.updatePrice(topicalPrice);
-        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
-        price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
-        price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
-
         productService.updateProduct(price.getProduct());
+        priceService.updatePrice(topicalPrice);
+
         return "redirect:/";
     }
 
