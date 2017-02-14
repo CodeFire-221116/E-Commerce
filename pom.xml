@@ -119,7 +119,21 @@
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>
+
+        <!--LiqPay-->
+        <dependency>
+            <groupId>com.liqpay</groupId>
+            <artifactId>liqpay-sdk</artifactId>
+            <version>0.6</version>
+        </dependency>
     </dependencies>
 
-
+    <!--LiqPay-->
+    <repositories>
+        <repository>
+            <id>bintray-stokito-maven</id>
+            <name>stokito-maven</name>
+            <url>https://dl.bintray.com/stokito/maven</url>
+        </repository>
+    </repositories>
 </project>

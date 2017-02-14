@@ -63,13 +63,14 @@
                 </thead>
                 <tbody>
                 <c:forEach items="${products}" var="product">
+                    <c:set var="topicalPrice" value="${product.findTopicalPrice()}"/>
                     <tr>
                         <td>${product.id}</td>
                         <td>${product.model}</td>
                         <td>${product.productType.name}</td>
                         <td>${product.brand.name}</td>
-                        <td>${product.findTopicalPrice().value} ${product.findTopicalPrice().currency.name}</td>
-                        <td>${product.findTopicalPrice().lastUpdated}</td>
+                        <td>${topicalPrice.value} ${topicalPrice.currency.name}</td>
+                        <td>${topicalPrice.lastUpdated}</td>
                         <td nowrap>
                             <a href="./edit?productId=${product.id}"
                                class="btn btn-md btn-warning">
@@ -80,6 +81,15 @@
                                class="btn btn-md btn-danger">
                                 <i class="fa fa-fw fa-trash"></i>
                             </a>
+                            <form method="POST" accept-charset="utf-8" action="https://www.liqpay.com/api/3/checkout">
+                                <input type="hidden" name="data" value="eyJ2ZXJzaW9uIjozLCJhY3Rpb24iOiJwYXkiLCJwdWJsaWNfa2V5IjoiaTM1ODI0NTYzODcxIiwiYW1vdW50IjoiNSIsImN1cnJlbmN5IjoiVUFIIiwiZGVzY3JpcHRpb24iOiLQnNC+0Lkg0YLQvtCy0LDRgCIsInR5cGUiOiJidXkiLCJzZXJ2ZXJfdXJsIjoiaHR0cHM6Ly9naXRodWIuY29tL2xpcXBheS9zZGstamF2YSIsImxhbmd1YWdlIjoicnUifQ==" />
+                                <input type="hidden" name="signature" value="3egjkpfGwIPsFm7yVVksk+6VOBA=" />
+                                <input type="hidden" name="product_name" value="${product.model}"/>
+                                <input type="hidden" name="amount" value="${topicalPrice.value}"/>
+                                <input type="hidden" name="currency" value="${topicalPrice.currency.name}"/>
+                                <input type="image" src="//static.liqpay.com/buttons/p1ru.radius.png" name="btn_text" />
+                            </form>
+                            <button onclick="buy()">buy product</button>
                         </td>
                     </tr>
                 </c:forEach>
@@ -93,24 +103,23 @@
         <div class="col-md-6">
             <ul class="pagination">
                 <li class="${empty param.pageNumber or param.pageNumber le 1 ?'disabled':''}">
-                    <a href="./">&laquo;</a>
+                    <a href="/">&laquo;</a>
                     <%--<input type="button" onclick="getListForPage(1)">--%>
                 </li>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
                     <li>
-                        <a href="./list?pageNumber=${i}&amountPerPage=20">${i}</a>
+                        <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
                             <%--<input type="button" onclick="getListForPage(${i})">--%>
                     </li>
                 </c:forEach>
                 <li class="${param.pageNumber ge numberOfPages ? 'disabled': ''}">
-                    <a href="./list?pageNumber=${numberOfPages}&amountPerPage=20" >&raquo;</a>
+                    <a href="/list?pageNumber=${numberOfPages}&amountPerPage=20" >&raquo;</a>
                     <%--<input type="button" onclick="getListForPage(${numberOfPages})">--%>
                 </li>
             </ul>
         </div>
         <div class="col-md-2"></div>
     </div>
-    <%--<%@include file="/WEB-INF/jsp/common/pagination.jsp" %>--%>
 </div>
 <%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
 <script>
@@ -120,6 +129,14 @@
         $.get("/list?pageNumber=" + pageNumber + "&amountPerPage=20", function (data) {
             alert("Data: " + data + "\nStatus: " + status);
         });
+    };
+    buy = function() {
+        <c:forEach items="${products}" var="product">
+        $.post("/buy", ${product.model},
+            function (data) {
+            alert("Data: " + data + "\nStatus: " + status);
+        });
+        </c:forEach>
     }
 </script>
 </body>

@@ -196,6 +196,11 @@ public class IndexController {
         return "redirect:/";
     }
 
+    @RequestMapping(value = "/buy", method = RequestMethod.POST)
+    public String postDeleteProduct(Product productToBuy) {
+        return "redirect:/";
+    }
+
     @PostConstruct
     public void postConstruct() {
 //        initBrands("Apple", "Samsung", "Sony", "Lenovo");
@@ -287,6 +292,6 @@ public class IndexController {
         long remainder = totalProducts % amountByPage;
         model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
-        return "users/list";
+        return "products/list";
     }
 }

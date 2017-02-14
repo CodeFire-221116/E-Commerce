@@ -102,7 +102,6 @@
         </div>
         <div class="col-md-2"></div>
     </div>
-    <%--<%@include file="/WEB-INF/jsp/common/pagination.jsp" %>--%>
 </div>
 <%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
 </body>
