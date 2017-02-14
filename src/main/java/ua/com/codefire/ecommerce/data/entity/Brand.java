@@ -1,5 +1,6 @@
 package ua.com.codefire.ecommerce.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -29,6 +30,7 @@ public class Brand implements Serializable {
     @Column
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "brand")
     private List<Product> products;
 

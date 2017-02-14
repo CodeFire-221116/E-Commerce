@@ -1,6 +1,7 @@
 package ua.com.codefire.ecommerce.data.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.CascadeType;
 
@@ -37,6 +38,7 @@ public class Price {
     @Column(name = "is_topical")
     private boolean isTopical;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;

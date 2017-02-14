@@ -1,5 +1,7 @@
 package ua.com.codefire.ecommerce.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
@@ -26,6 +28,7 @@ public class ProductType implements Serializable {
     @Column
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "productType")
     private List<Product> products;
 
