@@ -88,15 +88,15 @@ public class UserService {
         return userRepo.findByUsername(name);
     }
 
-    public Boolean ifUserRegistered(String name, String password) {
+    public boolean ifUserRegistered(String name, String password) {
         if (name == null) {
-            return null;
+            return false;
         }
 
         User userByName = getUserByName(name);
 
         if (userByName == null) {
-            return null;
+            return false;
         }
 
         if (password == null) {

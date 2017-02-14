@@ -22,6 +22,7 @@ import javax.servlet.http.HttpSession;
 public class AuthController {
     @Autowired
     private UserService service;
+
     @RequestMapping(path = "/auth")
     public String getAuth() {
         return "common/authorization";
