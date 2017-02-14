@@ -23,7 +23,7 @@ public class AuthFilter implements Filter {
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
-        if (req.getServletPath().indexOf("/res") > 0) {
+        if (req.getServletPath().startsWith("/res/") || req.getServletPath().startsWith("/rest/")) {
             chain.doFilter(request, response);
             return;
         }
