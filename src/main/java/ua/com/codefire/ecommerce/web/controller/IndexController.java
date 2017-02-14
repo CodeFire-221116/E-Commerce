@@ -201,15 +201,6 @@ public class IndexController {
         return "redirect:/";
     }
 
-//    @PostConstruct
-//    public void postConstruct() {
-////        initBrands("Apple", "Samsung", "Sony", "Lenovo");
-////        initCurrencies("$", "€", "円", "￥");
-////        initProductTypes("Mobile", "Notebook", "Furniture");
-////        initPrices();
-////        initProducts();
-//    }
-
     @RequestMapping(value = "/init", method = RequestMethod.GET)
     public String initValues() {
         initBrands("Apple", "Samsung", "Sony", "Lenovo");
