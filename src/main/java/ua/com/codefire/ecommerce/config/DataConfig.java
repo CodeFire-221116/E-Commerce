@@ -31,7 +31,7 @@ public class DataConfig {
     private Environment env;
 
     @Bean
-    public HikariDataSource getDataSource() {
+    public HikariDataSource dataSource() {
         HikariConfig config = new HikariConfig();
         config.setDriverClassName(env.getProperty("database.driver"));
         config.setJdbcUrl(env.getProperty("database.url"));
@@ -52,7 +52,7 @@ public class DataConfig {
 
         entityManagerFactoryBean.setPersistenceProvider(new HibernatePersistenceProvider());
         entityManagerFactoryBean.setPackagesToScan("ua.com.codefire.ecommerce.data.entity");
-        entityManagerFactoryBean.setDataSource(getDataSource());
+        entityManagerFactoryBean.setDataSource(dataSource());
 
         return entityManagerFactoryBean;
     }
