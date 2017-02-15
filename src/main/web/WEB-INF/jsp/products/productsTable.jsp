@@ -25,6 +25,7 @@
     </style>
 </head>
 <body>
+<%@include file="/WEB-INF/jsp/common/menu.jsp" %>
 <div class="container">
 
     <header class="page-header">
@@ -58,7 +59,7 @@
                                         <a href="" style="text-align: left">
                                             Read more
                                         </a>
-                                        <a href="" style="text-align: right">
+                                        <a href="/cart/add?productId=${products.get(i * 4 + j).id}" style="text-align: right">
                                             Add to cart
                                         </a>
                                     </p>
