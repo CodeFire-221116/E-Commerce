@@ -29,13 +29,18 @@ public class CartController
 
     private Map<Product, Integer> getCartContent() {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpSession session = attr.getRequest().getSession();
+
+        return getCartContent(attr.getRequest());
+    }
+
+    private Map<Product, Integer> getCartContent(HttpServletRequest request) {
+        HttpSession session = request.getSession();
 
         Map<Product, Integer> cart = (Map<Product, Integer>) session.getAttribute("cart");
         if (cart == null) {
             cart = new HashMap<>();
+            session.setAttribute("cart", cart);
         }
-        session.setAttribute("cart", cart);
 
         return cart;
     }
@@ -50,7 +55,7 @@ public class CartController
 
     @RequestMapping("/cart/add")
     public String addToCart(@RequestParam int productId, HttpServletRequest request, Model model) {
-        Map<Product, Integer> cart = getCartContent();
+        Map<Product, Integer> cart = getCartContent(request);
         Product product = productService.getProduct(productId);
 
         int count = cart.getOrDefault(product, 0);
