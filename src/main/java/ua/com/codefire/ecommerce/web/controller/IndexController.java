@@ -46,7 +46,7 @@ public class IndexController {
         long remainder = totalProducts % amountByPage;
 
         model.addAttribute("products", productsByPage);
-        model.addAttribute("totalProductsCount", productService.getProductsAmount());
+        model.addAttribute("totalProductsCount", totalProducts);
         model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
