@@ -31,16 +31,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${cartContent}" var="prod">
+                <c:forEach items="${shoppingCart.items}" var="cartItem">
 
                     <tr>
-                        <td>${prod.key.id}</td>
-                        <td>${prod.key.brand.name} ${prod.key.productType.name} ${prod.key.model}</td>
-                        <td>${prod.value}</td>
-                        <td></td>
+                        <td>${cartItem.key.id}</td>
+                        <td>${cartItem.key.brand.name} ${cartItem.key.productType.name} ${cartItem.key.model}</td>
+                        <td>${cartItem.value.amount}</td>
+                        <td>${cartItem.value.price}</td>
                         <td nowrap>
-                            <a href="/cart/remove?productId=${prod.key.id}"
-                               onclick="return confirm('Are you sure want delete ${prod.key.id} item?');"
+                            <a href="/cart/remove?productId=${cartItem.key.id}"
+                               onclick="return confirm('Are you sure want delete ${cartItem.key.id} item?');"
                                class="btn btn-md btn-danger">
                                 <i class="fa fa-fw fa-trash"></i>
                             </a>
@@ -51,6 +51,7 @@
                 </tbody>
             </table>
         </div>
+        <h1>Total: ${shoppingCart.total}</h1>
     </div>
 </div>
 <%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
