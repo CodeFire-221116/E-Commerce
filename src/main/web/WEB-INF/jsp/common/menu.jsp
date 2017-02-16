@@ -25,7 +25,7 @@
                         <li ${page_type.equals('filter') ? 'class="active"' : ''}><a href="/filter">Filter</a></li>
                         <li ${page_type.equals('pages') ? 'class="active"' : ''}><a href="/users/">Users</a></li>
                         <li ${page_type.equals('cart') ? 'class="active"' : ''}>
-                            <a class="fa fa-shopping-cart" href="/cart"><span class="badge">${cart.size()}</span></a></li>
+                            <a class="fa fa-shopping-cart" href="/cart"><span class="badge">${shoppingCart.items.size()}</span></a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <c:choose>
