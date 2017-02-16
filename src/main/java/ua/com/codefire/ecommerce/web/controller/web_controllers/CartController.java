@@ -1,4 +1,4 @@
-package ua.com.codefire.ecommerce.web.controller;
+package ua.com.codefire.ecommerce.web.controller.web_controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
