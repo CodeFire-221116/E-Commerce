@@ -164,7 +164,9 @@ public class ClientProductsController {
     }
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public String postDeleteProduct(Product productToBuy) {
+    public String postDeleteProduct(List<Product> productsToBuy) {
+        System.out.println(productsToBuy);
+
         return "redirect:/";
     }
 
