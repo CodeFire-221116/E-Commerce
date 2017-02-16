@@ -27,6 +27,10 @@ public class ShoppingCartItem implements Serializable {
         this.amount = amount;
     }
 
+    public Product getProduct() {
+        return product;
+    }
+
     public double getPrice() {
         for (Price price:product.getPrices()
              ) {
@@ -34,6 +38,7 @@ public class ShoppingCartItem implements Serializable {
                 return price.getValue();
             }
         }
+
         return 0;
     }
 
