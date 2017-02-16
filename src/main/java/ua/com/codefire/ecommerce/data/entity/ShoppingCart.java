@@ -65,7 +65,7 @@ public class ShoppingCart implements Serializable {
         double total = 0;
         for (ShoppingCartItem shoppingCartItem:items.values()
                 ) {
-            total += shoppingCartItem.getAmount();
+            total += shoppingCartItem.getSum();
         }
         return total;
     }
