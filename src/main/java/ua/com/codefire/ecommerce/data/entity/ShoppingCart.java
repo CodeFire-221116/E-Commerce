@@ -42,16 +42,22 @@ public class ShoppingCart implements Serializable {
     public void increaseProductAmount(Product product) {
         ShoppingCartItem shoppingCartItem = items.get(product);
         if (shoppingCartItem == null) {
-            shoppingCartItem = new ShoppingCartItem(product);
+            items.put(product, new ShoppingCartItem(product));
         } else {
             shoppingCartItem.increaseAmount();
         }
+
     }
 
     public void decreaseAmount(Product product) {
         ShoppingCartItem shoppingCartItem = items.get(product);
         if (shoppingCartItem != null) {
-            items.get(product).decreaseAmount();
+            if (shoppingCartItem.getAmount() == 1) {
+                items.remove(shoppingCartItem);
+            } else {
+                shoppingCartItem.decreaseAmount();
+            }
+
         }
     }
 
