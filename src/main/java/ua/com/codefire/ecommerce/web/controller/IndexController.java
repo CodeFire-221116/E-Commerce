@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Created by human on 1/31/17.
  */
+@RequestMapping("/")
 @Controller
 public class IndexController {
     @Autowired

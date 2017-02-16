@@ -3,6 +3,7 @@ package ua.com.codefire.ecommerce.web.controller.rest_controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -19,7 +20,8 @@ import java.util.*;
 /**
  * Created by ankys on 15.02.2017.
  */
-@RestController("/rest/products")
+@RequestMapping("/rest/products")
+@Controller
 public class RestProductsController {
     @Autowired
     private ProductService productService;
@@ -29,17 +31,17 @@ public class RestProductsController {
     private static final int amountByPage = 20;
 
     @RequestMapping({"/", "/index"})
-    public List<Product> getIndex(Model model) {
+    public List<Product> getProductsRest(Model model) {
         return productService.getProductsByPage(1, amountByPage);
     }
 
     @RequestMapping("/amount")
-    public ResponseEntity<Long> getAmountOfProducts() {
+    public ResponseEntity<Long> getAmountOfProductsRest() {
         return new ResponseEntity<Long>(productService.getProductsAmount(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/new", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> postCreateProduct(@Validated @ModelAttribute Price price,
+    public ResponseEntity<Boolean> postCreateProductRest(@Validated @ModelAttribute Price price,
                                                      @RequestParam CommonsMultipartFile[] fileUpload, BindingResult result) {
         price.setLastUpdated(new Timestamp(System.currentTimeMillis()));
         price.setIsTopical(true);
@@ -68,12 +70,12 @@ public class RestProductsController {
     }
 
     @RequestMapping(value = "/product", method = RequestMethod.GET)
-    public ResponseEntity<Product> getProductEditPage(@RequestParam int productId) {
+    public ResponseEntity<Product> getProductRest(@RequestParam int productId) {
         return new ResponseEntity<Product>(productService.getProduct(productId), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public ResponseEntity<Boolean> postUpdateProduct(@ModelAttribute Price price,
+    public ResponseEntity<Boolean> postUpdateProductRest(@ModelAttribute Price price,
                                                      @RequestParam CommonsMultipartFile[] fileUpload) {
         try {
             Price topicalPrice = priceService.getTopicalPrice(price.getProduct().getId());
@@ -112,7 +114,7 @@ public class RestProductsController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public ResponseEntity<Boolean> postDeleteProduct(@RequestParam int productId) {
+    public ResponseEntity<Boolean> postDeleteProductRest(@RequestParam int productId) {
         try {
             productService.deleteProduct(productService.getProduct(productId));
 
@@ -127,7 +129,7 @@ public class RestProductsController {
     }
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public String postBuyProduct(Product productToBuy) {
+    public String postBuyProductRest(Product productToBuy) {
         return "redirect:/";
     }
 }

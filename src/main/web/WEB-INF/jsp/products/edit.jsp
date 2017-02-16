@@ -17,14 +17,13 @@
 <body>
 <%--<script type="text/javascript" src="/res/js/check_product.js"></script>onsubmit="return checkProduct()"--%>
 <div class="container">
-
-
     <div class="col-md-12">
         <header class="page-header">
             <h1>Edit Product</h1>
         </header>
     </div>
 
+    <%@include file="/WEB-INF/jsp/products/modals.jsp" %>
     <div class="row">
 
         <div class="col-md-1"></div>
@@ -74,39 +73,7 @@
                             <i class="fa fa-plus-square"></i>
                         </button>
                     </div>
-                    <div class="modal fade" id="typeModal" tabindex="-1" data-width="760" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header form-group row">
-                                    <div class="col-md-11">
-                                        <h3 class="modal-title" id="typeModalLabel">Add new type</h3>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button type="button" class="close form-control" data-dismiss="modal"
-                                                aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                </div>
 
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-12 form-group">
-                                            <input class="form-control" type="text" name="name"
-                                                   placeholder="Enter type here" id="newType"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                    </button>
-                                    <input type="button" class="btn btn-primary" onclick="sayHello()" title="Add"/>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
                 </div>
 
                 <div class="form-group row">
@@ -126,36 +93,6 @@
                                 data-toggle="modal" data-target="#brandModal">
                             <i class="fa fa-plus-square"></i>
                         </button>
-                    </div>
-                    <div class="modal fade" id="brandModal" tabindex="-1" data-width="760" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header form-group row">
-                                    <div class="col-md-11">
-                                        <h3 class="modal-title" id="brandModalLabel">Add new brand</h3>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button type="button" class="close form-control" data-dismiss="modal"
-                                                aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-12 form-group">
-                                            <input class="form-control" type="text" name="name"
-                                                   placeholder="Enter brand here" id="newBrand"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Add</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -198,36 +135,6 @@
                                 data-toggle="modal" data-target="#currencyModal">
                             <i class="fa fa-plus-square"></i>
                         </button>
-                    </div>
-                    <div class="modal fade" id="currencyModal" tabindex="-1" data-width="760" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header form-group row">
-                                    <div class="col-md-11">
-                                        <h3 class="modal-title" id="currencyModalLabel">Add new currency</h3>
-                                    </div>
-                                    <div class="col-md-1">
-                                        <button type="button" class="close form-control" data-dismiss="modal"
-                                                aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-
-                                </div>
-                                <div class="modal-body">
-                                    <div class="row">
-                                        <div class="col-md-12 form-group">
-                                            <input class="form-control" type="text" name="name"
-                                                   placeholder="Enter currency here" id="newCurrency"/>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary">Add</button>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
@@ -290,8 +197,8 @@
         // We can attach the `fileselect` event to all file inputs on the page
         $(document).on('change', ':file', function () {
             var input = $(this),
-                    numFiles = input.get(0).files ? input.get(0).files.length : 1,
-                    label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
+                numFiles = input.get(0).files ? input.get(0).files.length : 1,
+                label = input.val().replace(/\\/g, '/').replace(/.*\//, '');
             input.trigger('fileselect', [numFiles, label]);
         });
 
@@ -300,7 +207,7 @@
             $(':file').on('fileselect', function (event, numFiles, label) {
 
                 var input = $(this).parents('.input-group').find(':text'),
-                        log = numFiles > 1 ? numFiles + ' files selected' : label;
+                    log = numFiles > 1 ? numFiles + ' files selected' : label;
 
                 if (input.length) {
                     input.val(log);
