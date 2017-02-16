@@ -50,8 +50,8 @@
 
                 </tbody>
             </table>
+            <h1 class="text-right">Total: ${shoppingCart.total}</h1>
         </div>
-        <h1>Total: ${shoppingCart.total}</h1>
     </div>
 </div>
 <%@include file="/WEB-INF/jsp/common/javascript.jsp" %>
