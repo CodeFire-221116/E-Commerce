@@ -25,6 +25,7 @@
         <spring-webmvc>4.3.3.RELEASE</spring-webmvc>
         <spring-context>4.2.6.RELEASE</spring-context>
         <spring-data>1.10.6.RELEASE</spring-data>
+        <spring-security>4.2.1.RELEASE</spring-security>
         <mysql-version>5.1.40</mysql-version>
         <hibernate-version>5.2.2.Final</hibernate-version>
     </properties>
@@ -62,6 +63,18 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring-data}</version>
+        </dependency>
+
+        <!-- SPRING SECURITY -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security}</version>
         </dependency>
 
         <!--DataBase-->

@@ -42,11 +42,12 @@ public class AuthController {
             session.setAttribute(AttributeNames.SESSION_USER, currUser);
             //Left userName, because it is used too many times in too many places, need time to change. Need to change to user
             session.setAttribute(AttributeNames.SESSION_USERNAME, username);
-            if (currUser.getAccessLvl() == User.AccessLevel.User) {
-                return "redirect:/index";
-            } else {
-                return "redirect:/admin/index";
-            }
+//            if (currUser.getAccessLvl() == User.AccessLevel.User) {
+
+//            } else {
+//                return "redirect:/admin/index";
+//            }
+            return "redirect:/index";
         } else {
             session.setAttribute("flash_message", "Username or password is incorrect.");
             return "common/authorization";

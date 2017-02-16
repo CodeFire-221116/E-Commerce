@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Created by ankys on 15.02.2017.
  */
-@WebFilter("/rest/*")
+//@WebFilter("/rest/*")
 public class RestAuthFilter implements Filter {
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

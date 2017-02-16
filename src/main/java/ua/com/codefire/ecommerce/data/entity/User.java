@@ -23,9 +23,14 @@ public class User implements Serializable {
     private String password;
     @Column(name = "user_email")
     private String email;
-    @Column(name="user_access_lvl")
-    @Enumerated(EnumType.ORDINAL)
-    private AccessLevel accessLvl;
+
+    @ManyToMany
+    @JoinTable(name = "users_roles", joinColumns = {
+            @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "role_id", referencedColumnName = "role_id")
+    })
+    private List<Role> roleList;
 
     public User() {
     }
@@ -33,13 +38,6 @@ public class User implements Serializable {
     public User(String username, String notEncryptedPassword) {
         this.username = username;
         this.password = DigestUtils.md5Hex(notEncryptedPassword);
-    }
-
-    public User(String username, String password, String email, AccessLevel accessLvl) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-        this.accessLvl = accessLvl;
     }
 
     public Integer getId() {
@@ -72,14 +70,6 @@ public class User implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public AccessLevel getAccessLvl() {
-        return accessLvl;
-    }
-
-    public void setAccessLvl(AccessLevel accessLvl) {
-        this.accessLvl = accessLvl;
     }
 
     public boolean checkPassword(String notEncryptedPassword) {
@@ -115,10 +105,5 @@ public class User implements Serializable {
                 "username='" + username + '\'' +
                 ", id=" + id +
                 '}';
-    }
-
-    public enum AccessLevel {
-        Admin,
-        User
     }
 }

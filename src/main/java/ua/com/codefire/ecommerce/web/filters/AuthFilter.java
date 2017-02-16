@@ -12,7 +12,7 @@ import java.io.IOException;
 /**
  * Created by human on 12/1/16.
  */
-@WebFilter("/*")
+//@WebFilter("/*")
 public class AuthFilter implements Filter {
 
     private FilterConfig filterConfig;

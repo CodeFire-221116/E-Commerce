@@ -9,10 +9,10 @@ public class ContextInitializer extends AbstractAnnotationConfigDispatcherServle
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-//        System.out.println(env.toString());
         return new Class<?>[]{
                 ContextConfig.class,
-                DataConfig.class
+                DataConfig.class,
+                SecurityConfig.class
         };
     }
 

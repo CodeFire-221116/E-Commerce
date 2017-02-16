@@ -283,8 +283,7 @@ public class IndexController {
 
     private void initUsers() {
         for (int i = 0; i < 100; i++) {
-            User newUser = new User("test" + i, "12345", "test" + i + "@gmail.com",
-                    User.AccessLevel.User);
+            User newUser = new User("test" + i, "12345");
             userService.create(newUser);
         }
     }
