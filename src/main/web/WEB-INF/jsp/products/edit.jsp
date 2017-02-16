@@ -157,7 +157,7 @@
                 <div class="col-md-7">
                     <div class="pull-left">
                         <c:if test="${topicalPrice.product.id != null}">
-                            <a href="./delete?productId=${topicalPrice.product.id}"
+                            <a href="/admin/products/delete?productId=${topicalPrice.product.id}"
                                onclick="return confirm('Are you sure want delete ${topicalPrice.product.id} item?');"
                                class="btn btn-lg btn-danger">
                                 <i class="fa fa-fw fa-trash"></i>

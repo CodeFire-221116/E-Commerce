@@ -40,7 +40,7 @@
                     <h5>Products` count <span class="label label-default">${totalProductsCount}</span></h5>
                 </div>
                 <div class="panel-body text-center">
-                    <a class="btn btn-success pull-center" href="./new">
+                    <a class="btn btn-success pull-center" href="/admin/products/new">
                         <i class="fa fa-fw fa-plus"></i>
                     </a>
                 </div>
@@ -72,11 +72,11 @@
                         <td>${topicalPrice.value} ${topicalPrice.currency.name}</td>
                         <td>${topicalPrice.lastUpdated}</td>
                         <td nowrap>
-                            <a href="./edit?productId=${product.id}"
+                            <a href="/admin/products/edit?productId=${product.id}"
                                class="btn btn-md btn-warning">
                                 <i class="fa fa-fw fa-wrench"></i>
                             </a>
-                            <a href="./delete?productId=${product.id}"
+                            <a href="/admin/products/delete?productId=${product.id}"
                                onclick="return confirm('Are you sure want delete ${product.id} item?');"
                                class="btn btn-md btn-danger">
                                 <i class="fa fa-fw fa-trash"></i>
@@ -103,17 +103,17 @@
         <div class="col-md-6">
             <ul class="pagination">
                 <li class="${empty param.pageNumber or param.pageNumber le 1 ?'disabled':''}">
-                    <a href="/">&laquo;</a>
+                    <a href="/admin/products/">&laquo;</a>
                     <%--<input type="button" onclick="getListForPage(1)">--%>
                 </li>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
                     <li>
-                        <a href="/list?pageNumber=${i}&amountPerPage=20">${i}</a>
+                        <a href="/admin/products/list?pageNumber=${i}&amountPerPage=20">${i}</a>
                             <%--<input type="button" onclick="getListForPage(${i})">--%>
                     </li>
                 </c:forEach>
                 <li class="${param.pageNumber ge numberOfPages ? 'disabled': ''}">
-                    <a href="/list?pageNumber=${numberOfPages}&amountPerPage=20" >&raquo;</a>
+                    <a href="/admin/products/list?pageNumber=${numberOfPages}&amountPerPage=20" >&raquo;</a>
                     <%--<input type="button" onclick="getListForPage(${numberOfPages})">--%>
                 </li>
             </ul>
