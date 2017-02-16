@@ -82,7 +82,7 @@
                 </li>
                 <c:forEach var="i" begin="1" end="${numberOfPages}">
                     <li>
-                        <a href="./products?pageNumber=${i}&amountPerPage=20">${i}</a>
+                        <a href="${pageContext.servletContext.contextPath}/client/products/list?pageNumber=${i}&amountPerPage=20">${i}</a>
                             <%--<input type="button" onclick="getListForPage(${i})">--%>
                     </li>
                 </c:forEach>
