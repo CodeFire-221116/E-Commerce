@@ -1,4 +1,4 @@
-package ua.com.codefire.ecommerce.web.controller;
+package ua.com.codefire.ecommerce.web.controller.web_controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 /**
  * Created by human on 1/31/17.
  */
+@RequestMapping("/")
 @Controller
 public class IndexController {
     @Autowired
@@ -46,13 +47,19 @@ public class IndexController {
         long remainder = totalProducts % amountByPage;
 
         model.addAttribute("products", productsByPage);
-        model.addAttribute("totalProductsCount", productService.getProductsAmount());
+        model.addAttribute("totalProductsCount", totalProducts);
         model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
 
         return "products/list";
     }
 
-    @RequestMapping("/products")
+    /**
+     * Moved to ProductsController
+     * @param model
+     * @return
+     */
+    @Deprecated
+//    @RequestMapping("/products")
     public String getProducts(Model model) {
         List<Product> productsByPage = productService.getProductsByPage(1, amountByPage);
         Map<Product, String> productPhoto = new HashMap<>();
@@ -80,7 +87,13 @@ public class IndexController {
         return "common/registration";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.GET)
+    /**
+     * Moved to ProductsController
+     * @param model
+     * @return
+     */
+    @Deprecated
+//    @RequestMapping(value = "/new", method = RequestMethod.GET)
     public String getCreateProductPage(Model model) {
 
         Price topicalPrice = new Price();
@@ -98,7 +111,8 @@ public class IndexController {
         return "products/edit";
     }
 
-    @RequestMapping(value = "/new", method = RequestMethod.POST)
+    @Deprecated
+//    @RequestMapping(value = "/new", method = RequestMethod.POST)
     public String postCreateProduct(@Validated @ModelAttribute Price price,
                                     @RequestParam CommonsMultipartFile[] fileUpload, BindingResult result) {
 
@@ -125,84 +139,84 @@ public class IndexController {
     }
 
 
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public String getProductEditPage(@RequestParam int productId, Model model) {
-
-        Price productToEditTopicalPrice = priceService.getTopicalPrice(productId);
-
-        if (productToEditTopicalPrice.getProduct().getPhoto() != null) {
-            byte[] photo64 = Base64.getEncoder().encode(productToEditTopicalPrice.getProduct().getPhoto());
-            model.addAttribute("productImage", new String(photo64));
-        }
-
-        model.addAttribute("topicalPrice", productToEditTopicalPrice);
-        model.addAttribute("currencies", priceService.getAllCurrencies());
-        model.addAttribute("types", productService.getAllProductTypes());
-        model.addAttribute("brands", productService.getAllBrands());
-        model.addAttribute("productToEditPriceValue", productToEditTopicalPrice.getValue());
-
-        return "products/edit";
-    }
-
-    @RequestMapping(value = "/edit", method = RequestMethod.POST)
-    public String postUpdateProduct(@ModelAttribute Price price, @RequestParam CommonsMultipartFile[] fileUpload) {
-
-        Price topicalPrice = priceService.getTopicalPrice(price.getProduct().getId());
-        byte[] photo = topicalPrice.getProduct().getPhoto();
-
-        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
-        price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
-        price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
-
-        if (fileUpload != null && fileUpload.length > 0) {
-            for (CommonsMultipartFile aFile : fileUpload) {
-                if (aFile.getSize() > 0) {
-                    price.getProduct().setPhoto(aFile.getBytes());
-                }
-            }
-            if (fileUpload[0].getSize() == 0) {
-                price.getProduct().setPhoto(photo);
-            }
-        }
-
-        if (topicalPrice.getValue() == price.getValue() && topicalPrice.getCurrency().getName().equals(price.getCurrency().getName())) {
-            topicalPrice.setLastUpdated(new Timestamp(System.currentTimeMillis()));
-        } else {
-            price.setId(null);
-            topicalPrice.setIsTopical(false);
-            priceService.createPrice(price);
-        }
-
-        productService.updateProduct(price.getProduct());
-        priceService.updatePrice(topicalPrice);
-
-        return "redirect:/";
-    }
-
-    @RequestMapping(value = "/productType/addProduct", method = RequestMethod.POST)
-    public String postAddType(@ModelAttribute ProductType productType) {
-
-        productType.setName(productService.getProductTypeNameById(productType.getId()));
-        productService.createProductType(productType);
-
-        return "products/edit";
-    }
-
-    @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String postDeleteProduct(@RequestParam int productId) {
-
-        productService.deleteProduct(productService.getProduct(productId));
-
-        return "redirect:/";
-    }
-
-    @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public String postDeleteProduct(Product productToBuy) {
-        return "redirect:/";
-    }
+//    @RequestMapping(value = "/edit", method = RequestMethod.GET)
+//    public String getProductEditPage(@RequestParam int productId, Model model) {
+//
+//        Price productToEditTopicalPrice = priceService.getTopicalPrice(productId);
+//
+//        if (productToEditTopicalPrice.getProduct().getPhoto() != null) {
+//            byte[] photo64 = Base64.getEncoder().encode(productToEditTopicalPrice.getProduct().getPhoto());
+//            model.addAttribute("productImage", new String(photo64));
+//        }
+//
+//        model.addAttribute("topicalPrice", productToEditTopicalPrice);
+//        model.addAttribute("currencies", priceService.getAllCurrencies());
+//        model.addAttribute("types", productService.getAllProductTypes());
+//        model.addAttribute("brands", productService.getAllBrands());
+//        model.addAttribute("productToEditPriceValue", productToEditTopicalPrice.getValue());
+//
+//        return "products/edit";
+//    }
+//
+//    @RequestMapping(value = "/edit", method = RequestMethod.POST)
+//    public String postUpdateProduct(@ModelAttribute Price price, @RequestParam CommonsMultipartFile[] fileUpload) {
+//
+//        Price topicalPrice = priceService.getTopicalPrice(price.getProduct().getId());
+//        byte[] photo = topicalPrice.getProduct().getPhoto();
+//
+//        price.getCurrency().setName(priceService.getCurrencyNameById(price.getCurrency().getId()));
+//        price.getProduct().getBrand().setName(productService.getBrandNameById(price.getProduct().getBrand().getId()));
+//        price.getProduct().getProductType().setName(productService.getProductTypeNameById(price.getProduct().getProductType().getId()));
+//
+//        if (fileUpload != null && fileUpload.length > 0) {
+//            for (CommonsMultipartFile aFile : fileUpload) {
+//                if (aFile.getSize() > 0) {
+//                    price.getProduct().setPhoto(aFile.getBytes());
+//                }
+//            }
+//            if (fileUpload[0].getSize() == 0) {
+//                price.getProduct().setPhoto(photo);
+//            }
+//        }
+//
+//        if (topicalPrice.getValue() == price.getValue() && topicalPrice.getCurrency().getName().equals(price.getCurrency().getName())) {
+//            topicalPrice.setLastUpdated(new Timestamp(System.currentTimeMillis()));
+//        } else {
+//            price.setId(null);
+//            topicalPrice.setIsTopical(false);
+//            priceService.createPrice(price);
+//        }
+//
+//        productService.updateProduct(price.getProduct());
+//        priceService.updatePrice(topicalPrice);
+//
+//        return "redirect:/";
+//    }
+//
+//    @RequestMapping(value = "/productType/addProduct", method = RequestMethod.POST)
+//    public String postAddType(@ModelAttribute ProductType productType) {
+//
+//        productType.setName(productService.getProductTypeNameById(productType.getId()));
+//        productService.createProductType(productType);
+//
+//        return "products/edit";
+//    }
+//
+//    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+//    public String postDeleteProduct(@RequestParam int productId) {
+//
+//        productService.deleteProduct(productService.getProduct(productId));
+//
+//        return "redirect:/";
+//    }
+//
+//    @RequestMapping(value = "/buy", method = RequestMethod.POST)
+//    public String postDeleteProduct(Product productToBuy) {
+//        return "redirect:/";
+//    }
 
 //    @RequestMapping(value = "/init", method = RequestMethod.GET)
-    @PostConstruct
+//    @PostConstruct
     public void initValues() {
         if (productService.getProductsAmount() == 0) {
             initBrands("Apple", "Samsung", "Sony", "Lenovo");
@@ -273,19 +287,5 @@ public class IndexController {
                     User.AccessLevel.User);
             userService.create(newUser);
         }
-    }
-
-//    @ResponseBody
-    @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String index(@RequestParam Integer pageNumber, @RequestParam Integer amountPerPage, Model model) {
-        List<Product> allProducts = productService.getProductsByPage(pageNumber, amountPerPage);
-        model.addAttribute("products", allProducts);
-        model.addAttribute("totalProductsCount", productService.getProductsAmount());
-
-        long totalProducts = productService.getProductsAmount();
-        long remainder = totalProducts % amountByPage;
-        model.addAttribute("numberOfPages", (int) (Math.ceil(totalProducts / amountByPage) + remainder / 10));
-
-        return "products/list";
     }
 }
