@@ -81,6 +81,10 @@
                                class="btn btn-md btn-danger">
                                 <i class="fa fa-fw fa-trash"></i>
                             </a>
+                            <a href="/cart/add?productId=${product.id}"
+                               class="btn btn-md btn-success">
+                                <i class="fa fa-shopping-cart"></i>
+                            </a>
                             <form method="POST" accept-charset="utf-8" action="https://www.liqpay.com/api/3/checkout">
                                 <input type="hidden" name="data"
                                        value="eyJ2ZXJzaW9uIjozLCJhY3Rpb24iOiJwYXkiLCJwdWJsaWNfa2V5IjoiaTM1ODI0NTYzODcxIiwiYW1vdW50IjoiNSIsImN1cnJlbmN5IjoiVUFIIiwiZGVzY3JpcHRpb24iOiLQnNC+0Lkg0YLQvtCy0LDRgCIsInR5cGUiOiJidXkiLCJzZXJ2ZXJfdXJsIjoiaHR0cHM6Ly9naXRodWIuY29tL2xpcXBheS9zZGstamF2YSIsImxhbmd1YWdlIjoicnUifQ=="/>

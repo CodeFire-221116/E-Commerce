@@ -14,7 +14,8 @@ import java.util.List;
 /**
  * Created by Valery on 02.02.2017.
  */
-@Controller public class FilterController {
+@Controller
+public class FilterController {
 
     @Autowired
     private ProductService service;
@@ -27,8 +28,10 @@ import java.util.List;
 
         model.addAttribute("product_types", productTypes);
         model.addAttribute("products", products);
+        model.addAttribute("totalProductsCount", products.size());
+        model.addAttribute("filteredProductsCount", products.size());
 
-        return "filter";
+        return "products/filter";
     }
 
     @RequestMapping(value = "/filter/{id}")
@@ -44,8 +47,10 @@ import java.util.List;
 
         model.addAttribute("product_types", productTypes);
         model.addAttribute("products", products);
+        model.addAttribute("totalProductsCount", service.getProductsAmount());
+        model.addAttribute("filteredProductsCount", products.size());
 
-        return "filter";
+        return "products/filter";
     }
 }
 

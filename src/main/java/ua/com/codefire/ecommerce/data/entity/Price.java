@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -23,7 +24,7 @@ import java.util.List;
         @NamedQuery(name = "Price.findValueById", query= "SELECT p.value FROM Price p WHERE p.id = :priceId"),
         @NamedQuery(name = "Price.findTopical", query = "SELECT p FROM Price p WHERE p.isTopical = true AND p.product.id = :productId")
 })
-public class Price {
+public class Price implements Serializable {
     @Id
     @Column(name = "product_price_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

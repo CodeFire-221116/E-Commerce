@@ -1,5 +1,6 @@
 package ua.com.codefire.ecommerce.data.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
@@ -27,6 +28,7 @@ public class Currency {
     @Column
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "currency")
     private List<Price> prices;
 
