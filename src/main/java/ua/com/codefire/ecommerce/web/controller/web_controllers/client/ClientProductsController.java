@@ -1,14 +1,12 @@
 package ua.com.codefire.ecommerce.web.controller.web_controllers.client;
 
+import com.liqpay.LiqPay;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import ua.com.codefire.ecommerce.data.entity.*;
 import ua.com.codefire.ecommerce.data.service.PriceService;
@@ -164,8 +162,12 @@ public class ClientProductsController {
     }
 
     @RequestMapping(value = "/buy", method = RequestMethod.POST)
-    public String postDeleteProduct(Product productToBuy) {
-        return "redirect:/";
+    public String postDeleteProduct(@ModelAttribute Product product) {
+        Map params = new HashMap();
+        params.put("sandbox", "1"); // enable the testing environment and card will NOT charged. If not set will be used property isCnbSandbox()
+        LiqPay liqpay = new LiqPay("i35824563871", "fumlSxNaVnyXRDLhSS3CC6Ui2l7LzRNACxouqgYK");
+        String html = liqpay.cnb_form(params);
+        return html;
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
