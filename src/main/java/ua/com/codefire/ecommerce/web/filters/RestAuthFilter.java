@@ -24,8 +24,10 @@ public class RestAuthFilter implements Filter {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
         if(!httpServletRequest.getServletPath().contains("token")) {
-            String token = httpServletRequest.getHeader("token");
-            HttpSession session = httpServletRequest.getSession(false);
+            String token = httpServletRequest.getHeader("Token");
+
+            HttpSession session = httpServletRequest.getSession(true);
+
             if(token != null && session != null && token.equals(session.getId())) {
                 chain.doFilter(request, response);
             } else {

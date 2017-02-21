@@ -216,7 +216,7 @@ public class IndexController {
 //    }
 
 //    @RequestMapping(value = "/init", method = RequestMethod.GET)
-//    @PostConstruct
+    @PostConstruct
     public void initValues() {
         if (productService.getProductsAmount() == 0) {
             initBrands("Apple", "Samsung", "Sony", "Lenovo");

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import ua.com.codefire.ecommerce.data.entity.User;
 import ua.com.codefire.ecommerce.data.service.UserService;
 import ua.com.codefire.ecommerce.utils.AttributeNames;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpSession;
  * Created by ankys on 15.02.2017.
  */
 @RequestMapping("/rest")
-@Controller
+@RestController
 public class RestAuthController {
     @Autowired
     UserService userService;

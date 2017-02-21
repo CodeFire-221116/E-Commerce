@@ -21,7 +21,7 @@ import java.util.*;
  * Created by ankys on 15.02.2017.
  */
 @RequestMapping("/rest/products")
-@Controller
+@RestController
 public class RestProductsController {
     @Autowired
     private ProductService productService;
