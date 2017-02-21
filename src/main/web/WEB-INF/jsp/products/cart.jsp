@@ -51,7 +51,8 @@
                 </tbody>
             </table>
             <h3 class="text-right">Total: ${shoppingCart.total}</h3>
-            <div class="pull-right"><a class="btn btn-warning btn-lg" href="">Buy All</a></div>
+            <div class="pull-right">${payBtn}</div>
+            <%--<div class="pull-right"><a class="btn btn-warning btn-lg" href="/cart/buy">Buy All</a></div>--%>
         </div>
     </div>
 </div>
